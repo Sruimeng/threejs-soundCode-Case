@@ -20,8 +20,6 @@
         application.prototype.mesh(_app._scene);
         //color 类型 0x000000 "blue" 
         _app._scene.fog=new THREE.Fog('skyblue',0,250);
-        _app._scene.dispose();
-        console.log(_app._scene);
         document.getElementById("WebGLOutput").appendChild(_app._renderer.domElement);
     </script>
 </body>
