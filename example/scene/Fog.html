@@ -5,7 +5,7 @@
     <meta name="viewport"
         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Fog</title>
     <script src="../util/three.js"></script>
     <script src="../util/WebGL.js"></script>
     <script src="../util/stats.min.js"></script>
@@ -20,6 +20,8 @@
         application.prototype.mesh(_app._scene);
         //color 类型 0x000000 "blue" 
         _app._scene.fog=new THREE.Fog('skyblue',0,250);
+        _app._scene.dispose();
+        console.log(_app._scene);
         document.getElementById("WebGLOutput").appendChild(_app._renderer.domElement);
     </script>
 </body>
