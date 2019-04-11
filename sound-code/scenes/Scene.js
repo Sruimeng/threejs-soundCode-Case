@@ -4,16 +4,16 @@ import { Object3D } from '../core/Object3D.js';
  * @author mrdoob / http://mrdoob.com/
  */
 
- /*
- * 本文档为Three.js翻译文档，如有任何疑问请联系:
- * dreameng1997@163.com
- */
+/*
+* 本文档为Three.js翻译文档，如有任何疑问请联系:
+* pygmalioneffect@aliyun.com
+*/
 function Scene() {
-
+//object3D回调该方法
 	Object3D.call( this );
-
+//类型为Scene类型
 	this.type = 'Scene';
-
+//scene背景
 	this.background = null;
 	this.fog = null;
 	this.overrideMaterial = null;

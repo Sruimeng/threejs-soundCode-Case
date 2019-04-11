@@ -7,7 +7,7 @@ import { Color } from '../math/Color.js';
 
 /*
 * 本文档为Three.js翻译文档，如有任何疑问请联系:
-* dreameng1997@163.com
+* pygmalioneffect@aliyun.com
 */
 function Fog( color, near, far ) {   
 	/**
