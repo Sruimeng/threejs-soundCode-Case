@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../util/three.js"></script>
+    <script src="../util/WebGL.js"></script>
+    <script src="../util/stats.min.js"></script>
+    <script src="../util/application.js"></script>
+    <script src="../util/OrbitControls.js"></script>
+</head>
+
+<body>
+    <div id="WebGLOutput" class="webgl" style="width:100%;height: 100%;"></div>
+    <script>
+        var _app = application.prototype.init();
+        application.prototype.startRender(_app);
+        application.prototype.mesh(_app._scene);
+        //color 类型 0x000000 "blue" 
+        _app._scene.fog = new THREE.FogExp2('skyblue',0.005);
+        document.getElementById("WebGLOutput").appendChild(_app._renderer.domElement);
+    </script>
+</body>
+
+</html>

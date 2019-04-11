@@ -4,6 +4,10 @@ import { Object3D } from '../core/Object3D.js';
  * @author mrdoob / http://mrdoob.com/
  */
 
+ /*
+ * 本文档为Three.js翻译文档，如有任何疑问请联系:
+ * dreameng1997@163.com
+ */
 function Scene() {
 
 	Object3D.call( this );
