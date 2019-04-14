@@ -9,7 +9,7 @@ import { Object3D } from '../core/Object3D.js';
 * pygmalioneffect@aliyun.com
 */
 function Scene() {
-	//object3D回调该方法
+	//scene 为object3D类型 所以回调到object3D方法创建默认项
 	Object3D.call(this);
 	//类型为Scene类型
 	this.type = 'Scene';
