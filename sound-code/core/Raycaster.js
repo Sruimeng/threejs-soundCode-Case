@@ -5,15 +5,25 @@ import { Ray } from '../math/Ray.js';
  * @author bhouston / http://clara.io/
  * @author stephomi / http://stephaneginier.com/
  */
-
+/*
+* 本文档为Three.js翻译文档，如有任何疑问请联系:
+* pygmalioneffect@aliyun.com
+*/
 function Raycaster( origin, direction, near, far ) {
-
+	/**
+	 * 该方法为射线拾取的方法
+	 */
+	// 新建一个Ray对象，ray方法接受两个参数{
+	// 	射线的起点，
+	// 	射线的方向
+	// }
 	this.ray = new Ray( origin, direction );
 	// direction is assumed to be normalized (for accurate distance calculations)
-
+	//near的默认值为0
 	this.near = near || 0;
+	//far的默认值为无穷大
 	this.far = far || Infinity;
-
+	//新建一个参数对象，参数对象内容为可接受的物体类型
 	this.params = {
 		Mesh: {},
 		Line: {},
@@ -21,11 +31,11 @@ function Raycaster( origin, direction, near, far ) {
 		Points: { threshold: 1 },
 		Sprite: {}
 	};
-
+	//该方法为向对象添加参数
 	Object.defineProperties( this.params, {
 		PointCloud: {
 			get: function () {
-
+				//该参数已经被改成了params.Points参数
 				console.warn( 'THREE.Raycaster: params.PointCloud has been renamed to params.Points.' );
 				return this.Points;
 
@@ -35,22 +45,30 @@ function Raycaster( origin, direction, near, far ) {
 
 }
 
+//或者距离的方法
 function ascSort( a, b ) {
 
 	return a.distance - b.distance;
 
 }
-
+/**
+ * 判断和物体是否交叉的方法 接收四个参数{
+ * 		需要判断的物体
+ * 		射线变量
+ * 		后代的集合
+ * 		是否判断后代也相交
+ * }
+ */
 function intersectObject( object, raycaster, intersects, recursive ) {
-
+	//如果物体不可见则返回
 	if ( object.visible === false ) return;
-
+	//设置raycast
 	object.raycast( raycaster, intersects );
-
+	//判断是否遍历后代
 	if ( recursive === true ) {
-
+		//获得物体的后代
 		var children = object.children;
-
+		//如果长度不为0，递归
 		for ( var i = 0, l = children.length; i < l; i ++ ) {
 
 			intersectObject( children[ i ], raycaster, intersects, true );
@@ -63,8 +81,9 @@ function intersectObject( object, raycaster, intersects, recursive ) {
 
 Object.assign( Raycaster.prototype, {
 
+	//设置与line相交时的精度
 	linePrecision: 1,
-
+	//set方法
 	set: function ( origin, direction ) {
 
 		// direction is assumed to be normalized (for accurate distance calculations)
@@ -72,7 +91,7 @@ Object.assign( Raycaster.prototype, {
 		this.ray.set( origin, direction );
 
 	},
-
+	//
 	setFromCamera: function ( coords, camera ) {
 
 		if ( ( camera && camera.isPerspectiveCamera ) ) {
