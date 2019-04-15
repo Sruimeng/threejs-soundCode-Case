@@ -9,7 +9,7 @@ import { Ray } from '../math/Ray.js';
 * 本文档为Three.js翻译文档，如有任何疑问请联系:
 * pygmalioneffect@aliyun.com
 */
-function Raycaster( origin, direction, near, far ) {
+function Raycaster(origin, direction, near, far) {
 	/**
 	 * 该方法为射线拾取的方法
 	 */
@@ -17,7 +17,7 @@ function Raycaster( origin, direction, near, far ) {
 	// 	射线的起点，
 	// 	射线的方向
 	// }
-	this.ray = new Ray( origin, direction );
+	this.ray = new Ray(origin, direction);
 	// direction is assumed to be normalized (for accurate distance calculations)
 	//near的默认值为0
 	this.near = near || 0;
@@ -32,21 +32,21 @@ function Raycaster( origin, direction, near, far ) {
 		Sprite: {}
 	};
 	//该方法为向对象添加参数
-	Object.defineProperties( this.params, {
+	Object.defineProperties(this.params, {
 		PointCloud: {
 			get: function () {
 				//该参数已经被改成了params.Points参数
-				console.warn( 'THREE.Raycaster: params.PointCloud has been renamed to params.Points.' );
+				console.warn('THREE.Raycaster: params.PointCloud has been renamed to params.Points.');
 				return this.Points;
 
 			}
 		}
-	} );
+	});
 
 }
 
 //或者距离的方法
-function ascSort( a, b ) {
+function ascSort(a, b) {
 
 	return a.distance - b.distance;
 
@@ -59,19 +59,19 @@ function ascSort( a, b ) {
  * 		是否判断后代也相交
  * }
  */
-function intersectObject( object, raycaster, intersects, recursive ) {
+function intersectObject(object, raycaster, intersects, recursive) {
 	//如果物体不可见则返回
-	if ( object.visible === false ) return;
+	if (object.visible === false) return;
 	//设置raycast
-	object.raycast( raycaster, intersects );
+	object.raycast(raycaster, intersects);
 	//判断是否遍历后代
-	if ( recursive === true ) {
+	if (recursive === true) {
 		//获得物体的后代
 		var children = object.children;
 		//如果长度不为0，递归
-		for ( var i = 0, l = children.length; i < l; i ++ ) {
+		for (var i = 0, l = children.length; i < l; i++) {
 
-			intersectObject( children[ i ], raycaster, intersects, true );
+			intersectObject(children[i], raycaster, intersects, true);
 
 		}
 
@@ -79,75 +79,83 @@ function intersectObject( object, raycaster, intersects, recursive ) {
 
 }
 
-Object.assign( Raycaster.prototype, {
+Object.assign(Raycaster.prototype, {
 
 	//设置与line相交时的精度
 	linePrecision: 1,
 	//set方法
-	set: function ( origin, direction ) {
+	set: function (origin, direction) {
 
 		// direction is assumed to be normalized (for accurate distance calculations)
 
-		this.ray.set( origin, direction );
+		this.ray.set(origin, direction);
 
 	},
 	//
-	setFromCamera: function ( coords, camera ) {
+	setFromCamera: function (coords, camera) {
 
-		if ( ( camera && camera.isPerspectiveCamera ) ) {
+		if ((camera && camera.isPerspectiveCamera)) {
 
-			this.ray.origin.setFromMatrixPosition( camera.matrixWorld );
-			this.ray.direction.set( coords.x, coords.y, 0.5 ).unproject( camera ).sub( this.ray.origin ).normalize();
+			this.ray.origin.setFromMatrixPosition(camera.matrixWorld);
+			this.ray.direction.set(coords.x, coords.y, 0.5).unproject(camera).sub(this.ray.origin).normalize();
 
-		} else if ( ( camera && camera.isOrthographicCamera ) ) {
+		} else if ((camera && camera.isOrthographicCamera)) {
 
-			this.ray.origin.set( coords.x, coords.y, ( camera.near + camera.far ) / ( camera.near - camera.far ) ).unproject( camera ); // set origin in plane of camera
-			this.ray.direction.set( 0, 0, - 1 ).transformDirection( camera.matrixWorld );
+			this.ray.origin.set(coords.x, coords.y, (camera.near + camera.far) / (camera.near - camera.far)).unproject(camera); // set origin in plane of camera
+			this.ray.direction.set(0, 0, - 1).transformDirection(camera.matrixWorld);
 
 		} else {
 
-			console.error( 'THREE.Raycaster: Unsupported camera type.' );
+			console.error('THREE.Raycaster: Unsupported camera type.');
 
 		}
 
 	},
 
-	intersectObject: function ( object, recursive, optionalTarget ) {
+	intersectObject: function (object, recursive, optionalTarget) {
 
 		var intersects = optionalTarget || [];
 
-		intersectObject( object, this, intersects, recursive );
+		intersectObject(object, this, intersects, recursive);
 
-		intersects.sort( ascSort );
+		intersects.sort(ascSort);
 
 		return intersects;
 
 	},
 
-	intersectObjects: function ( objects, recursive, optionalTarget ) {
+	/**
+	 * @description
+	 * @date 2019-04-15
+	 * @param {*	} objects
+	 * @param {*} recursive
+	 * @param {*} optionalTarget
+	 * @returns 
+	 */
+	intersectObjects: f unction (objects, recursive, optionalTarget) {
 
 		var intersects = optionalTarget || [];
 
-		if ( Array.isArray( objects ) === false ) {
+		if (Array.isArray(objects) === false) {
 
-			console.warn( 'THREE.Raycaster.intersectObjects: objects is not an Array.' );
+			console.warn('THREE.Raycaster.intersectObjects: objects is not an Array.');
 			return intersects;
 
 		}
 
-		for ( var i = 0, l = objects.length; i < l; i ++ ) {
+		for (var i = 0, l = objects.length; i < l; i++) {
 
-			intersectObject( objects[ i ], this, intersects, recursive );
+			intersectObject(objects[i], this, intersects, recursive);
 
 		}
 
-		intersects.sort( ascSort );
+		intersects.sort(ascSort);
 
 		return intersects;
 
 	}
 
-} );
+});
 
 
 export { Raycaster };
