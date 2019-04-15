@@ -132,7 +132,7 @@ Object.assign(Raycaster.prototype, {
 	 * @param {*} optionalTarget
 	 * @returns 
 	 */
-	intersectObjects: f unction (objects, recursive, optionalTarget) {
+	intersectObjects: function (objects, recursive, optionalTarget) {
 
 		var intersects = optionalTarget || [];
 
