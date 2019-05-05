@@ -1,11 +1,34 @@
+//版本号
 export var REVISION = '103dev';
+
+//鼠标的三个按键
 export var MOUSE = { LEFT: 0, MIDDLE: 1, RIGHT: 2 };
+
+/**
+ * 上面的几个属性为剪裁，变量分别对应
+ * 都不剪裁
+ * 背面剪裁
+ * 正面剪裁
+ * 正反面剪裁
+ * 字面的意思，直接看英文就行
+ */
 export var CullFaceNone = 0;
 export var CullFaceBack = 1;
 export var CullFaceFront = 2;
 export var CullFaceFrontBack = 3;
+/**
+ * 指定是顺时针拼接顶点还是逆时针分别对应
+ * 逆时针
+ * 顺时针
+ */
 export var FrontFaceDirectionCW = 0;
 export var FrontFaceDirectionCCW = 1;
+/**
+ * 下面是三种阴影模式分别为
+ * 默认模式
+ * PCF算法
+ * PCSS算法
+ */
 export var BasicShadowMap = 0;
 export var PCFShadowMap = 1;
 export var PCFSoftShadowMap = 2;
