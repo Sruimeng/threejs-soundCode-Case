@@ -196,13 +196,9 @@ export var CubeUVReflectionMapping = 306;
 export var CubeUVRefractionMapping = 307;
 /**
  * 这些常量定义了纹理贴图的 wrapS 和 wrapT 属性，定义了水平和垂直方向上纹理的包裹方式。 
- * 
- * 使用RepeatWrapping，纹理将简单地重复到无穷大。 With RepeatWrapping the texture will simply repeat to infinity.
- * 
+ * 使用RepeatWrapping，纹理将简单地重复到无穷大。
  * ClampToEdgeWrapping是默认值，纹理中的最后一个像素将延伸到网格的边缘。
- * 
  * 使用MirroredRepeatWrapping， 纹理将重复到无穷大，在每次重复时将进行镜像。
- * 
  */
 export var RepeatWrapping = 1000;
 export var ClampToEdgeWrapping = 1001;
