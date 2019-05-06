@@ -102,23 +102,30 @@ function Texture(image, mapping, wrapS, wrapT, magFilter, minFilter, format, typ
 	this.minFilter = minFilter !== undefined ? minFilter : LinearMipMapLinearFilter;
 	//设置透明度
 	this.anisotropy = anisotropy !== undefined ? anisotropy : 1;
-	//设置
+	//设置shader接收的类型 默认为RGBA四个通道 
 	this.format = format !== undefined ? format : RGBAFormat;
 	this.type = type !== undefined ? type : UnsignedByteType;
-
+	//设置偏移量
 	this.offset = new Vector2(0, 0);
+	//设置复制的多少
 	this.repeat = new Vector2(1, 1);
+	//设置中心点
 	this.center = new Vector2(0, 0);
+	//设置是否旋转？
 	this.rotation = 0;
-
+	//自动更新矩阵
 	this.matrixAutoUpdate = true;
+	//新建图片自己的矩阵
 	this.matrix = new Matrix3();
-
+	//是否开启mipmap
 	this.generateMipmaps = true;
+	//是否预乘透明度，如果为true，像素的rgb会先乘以a在保存
 	this.premultiplyAlpha = false;
+	//是否需要垂直旋转
 	this.flipY = true;
+	//
 	this.unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
-
+	//设置编码格式
 	// Values of encoding !== THREE.LinearEncoding only supported on map, envMap and emissiveMap.
 	//
 	// Also changing the encoding after already used by a Material will not automatically make the Material
@@ -138,19 +145,19 @@ Texture.prototype = Object.assign(Object.create(EventDispatcher.prototype), {
 	constructor: Texture,
 
 	isTexture: true,
-
+	//更新矩阵
 	updateMatrix: function () {
 
 		this.matrix.setUvTransform(this.offset.x, this.offset.y, this.repeat.x, this.repeat.y, this.rotation, this.center.x, this.center.y);
 
 	},
-
+	//克隆方法
 	clone: function () {
 
 		return new this.constructor().copy(this);
 
 	},
-
+	//复制方法，这应该为私有方法名吧
 	copy: function (source) {
 
 		this.name = source.name;
@@ -290,7 +297,7 @@ Texture.prototype = Object.assign(Object.create(EventDispatcher.prototype), {
 		return output;
 
 	},
-
+	//隐藏
 	dispose: function () {
 
 		this.dispatchEvent({
@@ -298,7 +305,7 @@ Texture.prototype = Object.assign(Object.create(EventDispatcher.prototype), {
 		});
 
 	},
-
+	//纹理映射，传进来的是个二维向量，将st转换为uv
 	transformUv: function (uv) {
 
 		if (this.mapping !== UVMapping) return uv;
