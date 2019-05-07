@@ -2,14 +2,31 @@
  * @author Matt DesLauriers / @mattdesl
  * @author atix / arthursilber.de
  */
-
+/*
+* 本文档为Three.js翻译文档，如有任何疑问请联系:
+* pygmalioneffect@aliyun.com
+*/
 import { Texture } from './Texture.js';
 import { NearestFilter, UnsignedShortType, UnsignedInt248Type, DepthFormat, DepthStencilFormat } from '../constants.js';
 
+/**
+ * @description
+ * @date 2019-05-07
+ * @param {Number} width
+ * @param {Number} height
+ * @param {Number} type
+ * @param {Number} mapping
+ * @param {Number} wrapS
+ * @param {Number} wrapT
+ * @param {Number} magFilter
+ * @param {Number} minFilter
+ * @param {Number} anisotropy
+ * @param {Number} format
+ */
 function DepthTexture( width, height, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, format ) {
-
+	//设置format默认为depthformat
 	format = format !== undefined ? format : DepthFormat;
-
+	//其他的大同小异
 	if ( format !== DepthFormat && format !== DepthStencilFormat ) {
 
 		throw new Error( 'DepthTexture format must be either THREE.DepthFormat or THREE.DepthStencilFormat' );

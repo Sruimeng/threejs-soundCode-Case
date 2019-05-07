@@ -48,7 +48,7 @@ var textureId = 0;
  * @param {Number} minFilter	最小值滤波器
  * @param {Number} format	读取的类型
  * @param {Number} type	
- * @param {Number} anisotropy	透明度
+ * @param {Number} anisotropy	各向异性
  * @param {Number} encoding		编码方式
  */
 function Texture(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy, encoding) {
@@ -100,7 +100,7 @@ function Texture(image, mapping, wrapS, wrapT, magFilter, minFilter, format, typ
 	 */
 	this.magFilter = magFilter !== undefined ? magFilter : LinearFilter;
 	this.minFilter = minFilter !== undefined ? minFilter : LinearMipMapLinearFilter;
-	//设置透明度
+	//设置各向异性
 	this.anisotropy = anisotropy !== undefined ? anisotropy : 1;
 	//设置shader接收的类型 默认为RGBA四个通道 
 	this.format = format !== undefined ? format : RGBAFormat;
