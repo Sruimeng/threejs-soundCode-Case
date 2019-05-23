@@ -4,6 +4,12 @@ import { Vector2 } from './Vector2.js';
  * @author bhouston / http://clara.io
  */
 
+/**
+ * @description  2D包围盒
+ * @date 2019-05-23
+ * @param {*} min
+ * @param {*} max
+ */
 function Box2( min, max ) {
 
 	this.min = ( min !== undefined ) ? min : new Vector2( + Infinity, + Infinity );
@@ -66,7 +72,7 @@ Object.assign( Box2.prototype, {
 		return this;
 
 	},
-
+	
 	makeEmpty: function () {
 
 		this.min.x = this.min.y = + Infinity;

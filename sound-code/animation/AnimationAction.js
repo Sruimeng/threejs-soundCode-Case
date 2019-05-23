@@ -10,13 +10,26 @@ import { WrapAroundEnding, ZeroCurvatureEnding, ZeroSlopeEnding, LoopPingPong, L
  * @author tschw
  *
  */
+/*
+* 本文档为Three.js翻译文档，如有任何疑问请联系:
+* pygmalioneffect@aliyun.com
+*/
 
+/**
+ * @description  用来储存和调用Animationclips中的动画
+ * 可以被链式调用，但是不要直接调用
+ * @date 2019-05-14
+ * @param { AnimationMixer} mixer 动画混合器	
+ * @param {AnimationClip} clip	动画
+ * @param {Object3D} localRoot	执行动画的对象
+ */
 function AnimationAction( mixer, clip, localRoot ) {
 
 	this._mixer = mixer;
 	this._clip = clip;
+	//如果对象没有，则为null
 	this._localRoot = localRoot || null;
-
+	//新建一个差值数组
 	var tracks = clip.tracks,
 		nTracks = tracks.length,
 		interpolants = new Array( nTracks );
@@ -46,7 +59,7 @@ function AnimationAction( mixer, clip, localRoot ) {
 
 	this._timeScaleInterpolant = null;
 	this._weightInterpolant = null;
-
+	//设置循环方式
 	this.loop = LoopRepeat;
 	this._loopCount = - 1;
 
