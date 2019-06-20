@@ -3,7 +3,11 @@ import { _Math } from './Math.js';
 /**
  * @author mrdoob / http://mrdoob.com/
  */
-
+/*
+* 本文档为Three.js翻译文档，如有任何疑问请联系:
+* pygmalioneffect@aliyun.com
+*/
+//默认的颜色
 var ColorKeywords = { 'aliceblue': 0xF0F8FF, 'antiquewhite': 0xFAEBD7, 'aqua': 0x00FFFF, 'aquamarine': 0x7FFFD4, 'azure': 0xF0FFFF,
 	'beige': 0xF5F5DC, 'bisque': 0xFFE4C4, 'black': 0x000000, 'blanchedalmond': 0xFFEBCD, 'blue': 0x0000FF, 'blueviolet': 0x8A2BE2,
 	'brown': 0xA52A2A, 'burlywood': 0xDEB887, 'cadetblue': 0x5F9EA0, 'chartreuse': 0x7FFF00, 'chocolate': 0xD2691E, 'coral': 0xFF7F50,
@@ -29,6 +33,14 @@ var ColorKeywords = { 'aliceblue': 0xF0F8FF, 'antiquewhite': 0xFAEBD7, 'aqua': 0
 	'springgreen': 0x00FF7F, 'steelblue': 0x4682B4, 'tan': 0xD2B48C, 'teal': 0x008080, 'thistle': 0xD8BFD8, 'tomato': 0xFF6347, 'turquoise': 0x40E0D0,
 	'violet': 0xEE82EE, 'wheat': 0xF5DEB3, 'white': 0xFFFFFF, 'whitesmoke': 0xF5F5F5, 'yellow': 0xFFFF00, 'yellowgreen': 0x9ACD32 };
 
+/**
+ * @description 颜色方法，接收rgb
+ * 
+ * @param {Number} r 
+ * @param {Number} g 
+ * @param {Number} b 
+ * @returns  
+ */
 function Color( r, g, b ) {
 
 	if ( g === undefined && b === undefined ) {
@@ -47,7 +59,9 @@ Object.assign( Color.prototype, {
 	isColor: true,
 
 	r: 1, g: 1, b: 1,
-
+	/**
+	 * 设置方法 如果收到的是十六进制的数组，则设置为Hex 否则查找颜色名称
+	 */
 	set: function ( value ) {
 
 		if ( value && value.isColor ) {
