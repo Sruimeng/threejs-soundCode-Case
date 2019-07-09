@@ -677,7 +677,9 @@ Object.assign(Color.prototype, {
 		return this;
 
 	},
-
+	/**
+	 * 混合两种颜色
+	 */
 	addColors: function (color1, color2) {
 
 		this.r = color1.r + color2.r;
@@ -687,7 +689,9 @@ Object.assign(Color.prototype, {
 		return this;
 
 	},
-
+	/**
+	 * 混合一个分量
+	 */
 	addScalar: function (s) {
 
 		this.r += s;
