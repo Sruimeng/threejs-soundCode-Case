@@ -10,6 +10,14 @@ import { _Math } from './Math.js';
  * The azimuthal angle (theta) is measured from the positive z-axiz.
  */
 
+/**
+ * @description 
+ * 
+ * @param {any} radius 
+ * @param {any} phi 
+ * @param {any} theta 
+ * @returns  
+ */
 function Spherical( radius, phi, theta ) {
 
 	this.radius = ( radius !== undefined ) ? radius : 1.0;
