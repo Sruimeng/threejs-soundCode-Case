@@ -134,9 +134,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 		var lastQuaternion = new THREE.Quaternion();
 
 		return function update() {
-
 			var position = scope.object.position;
-
+			console.log(spherical.theta*THREE.Math.RAD2DEG+"||||||"+spherical.phi*THREE.Math.RAD2DEG);
 			offset.copy( position ).sub( scope.target );
 
 			// rotate offset to "y-axis-is-up" space
