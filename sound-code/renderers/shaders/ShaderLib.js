@@ -10,7 +10,7 @@ import { Matrix3 } from '../../math/Matrix3.js';
  * @author mrdoob / http://mrdoob.com/
  * @author mikael emtinger / http://gomo.se/
  */
-
+//材质库
 var ShaderLib = {
 
 	basic: {

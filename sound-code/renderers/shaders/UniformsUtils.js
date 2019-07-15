@@ -2,6 +2,13 @@
  * Uniform Utilities
  */
 
+/**
+ * @description 克隆uniform
+ * 
+ * @export
+ * @param {Object} src 一个数据的集合
+ * @returns  
+ */
 export function cloneUniforms( src ) {
 
 	var dst = {};
@@ -13,7 +20,7 @@ export function cloneUniforms( src ) {
 		for ( var p in src[ u ] ) {
 
 			var property = src[ u ][ p ];
-
+			//有克隆方法的直接克隆 数组的复制数组 没有的直接复制
 			if ( property && ( property.isColor ||
 				property.isMatrix3 || property.isMatrix4 ||
 				property.isVector2 || property.isVector3 || property.isVector4 ||
@@ -39,6 +46,13 @@ export function cloneUniforms( src ) {
 
 }
 
+/**
+ * @description 合并uniform，将传进来的object变成单个的
+ * 
+ * @export
+ * @param {any} uniforms 
+ * @returns  
+ */
 export function mergeUniforms( uniforms ) {
 
 	var merged = {};
