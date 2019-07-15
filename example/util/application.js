@@ -63,6 +63,9 @@ application = (function () {
             var matStdObjects = new THREE.MeshPhongMaterial({ color: 0xA00000});
             var geoBox = new THREE.BoxBufferGeometry(Math.PI, Math.sqrt(2), Math.E);
             var mshStdBox = new THREE.Mesh(geoBox, matStdObjects);
+            var box = new THREE.Box3();
+            console.log(box);
+            
             mshStdBox.position.set(0, 30, 0);
             mshStdBox.rotation.set(0, Math.PI / 2.0, 0);
             mshStdBox.scale.set(5,5,5);
