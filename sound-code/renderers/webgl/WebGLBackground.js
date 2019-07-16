@@ -24,7 +24,6 @@ function WebGLBackground( renderer, state, objects, premultipliedAlpha ) {
 	var currentBackgroundVersion = 0;
 
 	function render( renderList, scene, camera, forceClear ) {
-
 		var background = scene.background;
 
 		if ( background === null ) {
