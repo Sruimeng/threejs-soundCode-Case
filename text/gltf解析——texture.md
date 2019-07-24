@@ -89,4 +89,5 @@
 |**name**|`string`|名字|No|
 |**extensions**|`object`|属性拓展|No|
 |**extras**|`any`|附加信息|No|
-
+## 结语
+- samplers在动画中也是存在的，注意区分。
