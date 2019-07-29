@@ -1,7 +1,5 @@
 # materials
 glTF的材质部分，使用的是一组参数来定义材质。这些参数为`PBR`的各种参数，包括金属性和粗糙性等参数。
-## 结构图
-结构图中展示了`meshs`到`materials`再到`textures`之间的过程。
 ## 例子
 ### 最简单的例子
 ````javascript
@@ -18,7 +16,7 @@ glTF的材质部分，使用的是一组参数来定义材质。这些参数为`
     ]
 }
 ````
-上述的代码为最简单的gltf材质的例子，其中包括了材质的名称，和PBR的相关参数。`pbrMetallicRoughness`中的`baseColorFactor`为RGBA颜色，`metallicFactor`和`roughnessFactor`为0到1之间的float值。关于这两个值如何影响材质的就不展开了，可能会写PBR的相关文章。
+上述的代码为最简单的gltf材质的例子，其中包括了材质的名称，和PBR的相关参数。`pbrMetallicRoughness`中的`baseColorFactor`为RGBA颜色，`metallicFactor`和`roughnessFactor`为0到1之间的float值。
 ### 加上纹理的例子
 ````javascript
 {
@@ -125,5 +123,4 @@ glTF的材质部分，使用的是一组参数来定义材质。这些参数为`
 |**extras**|`any`|附加信息|No|
 
 ## 结束
-关于各个的属性的schema，太多了就不贴上来了，想了解具体的直接去官网看就行。
 传送门：https://github.com/KhronosGroup/glTF/tree/master/specification/2.0
