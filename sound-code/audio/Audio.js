@@ -2,47 +2,60 @@
  * @author mrdoob / http://mrdoob.com/
  * @author Reece Aaron Lecrivain / http://reecenotes.com/
  */
-
 import { Object3D } from '../core/Object3D.js';
-
+/**
+ * Audio声音实例，必须有一个listener
+ */
 function Audio( listener ) {
-
+	//继承自object3D
 	Object3D.call( this );
 
 	this.type = 'Audio';
-
+	//获得Audiolistener
 	this.listener = listener;
+	//获得listener上下文
 	this.context = listener.context;
-
+	//获得上下文创建的gain node
 	this.gain = this.context.createGain();
 	this.gain.connect( listener.getInput() );
-
+	//自动播放
 	this.autoplay = false;
-
+	//资源的buffer
 	this.buffer = null;
+	//音高，以音分为单位。 +/- 100为一个半音， +/- 1200为一个八度。默认值为0。（前面的是官网的解释，具体的音乐是怎么划分的我也不清楚）
 	this.detune = 0;
+	//循环
 	this.loop = false;
+	//开始时间
 	this.startTime = 0;
+	//偏移的时间
 	this.offset = 0;
+	//播放的速率
 	this.playbackRate = 1;
+	//是否在播放
 	this.isPlaying = false;
+	//是否有播放暂停等方法
 	this.hasPlaybackControl = true;
+	//音乐资源类型
 	this.sourceType = 'empty';
-
+	// 表示BiquadFilterNodes的数组.https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode 
+	// 可以使用多种不同的低阶filters去创建复杂的音效. 
+	// filters可以通过 Audio.setFilter 或者 Audio.setFilters设置.
 	this.filters = [];
 
 }
 
 Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
-
+	//构造器类型
 	constructor: Audio,
-
+	//获得gainnode
 	getOutput: function () {
 
 		return this.gain;
 
 	},
-
+	//设置source给audioBuffer, 和设置sourceType给 'audioNode'.
+	//并且设置hasPlaybackControl为false.
 	setNodeSource: function ( audioNode ) {
 
 		this.hasPlaybackControl = false;
@@ -54,6 +67,10 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	},
 
+	/**
+	*  应用HTMLMediaElement类型对象作为音源.
+	* 并且设置hasPlaybackControl为false.
+	*/
 	setMediaElementSource: function ( mediaElement ) {
 
 		this.hasPlaybackControl = false;
@@ -65,6 +82,10 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	},
 
+	/**
+	 * 设置source给audioBuffer, 和设置sourceType为'buffer'.
+	 * 如果autoplay为true, 也开始播放.
+	 */
 	setBuffer: function ( audioBuffer ) {
 
 		this.buffer = audioBuffer;
@@ -75,7 +96,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this;
 
 	},
-
+	/**
+	 * 播放方法
+	 */
 	play: function () {
 
 		if ( this.isPlaying === true ) {
@@ -91,9 +114,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 			return;
 
 		}
-
+		//创建一个buffer资源
 		var source = this.context.createBufferSource();
-
+		//设置相关参数
 		source.buffer = this.buffer;
 		source.loop = this.loop;
 		source.onended = this.onEnded.bind( this );
@@ -110,7 +133,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this.connect();
 
 	},
-
+	/**
+	 * 暂停方法
+	 */
 	pause: function () {
 
 		if ( this.hasPlaybackControl === false ) {
@@ -119,7 +144,13 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 			return;
 
 		}
-
+		/**
+		 * 如果正在播放：
+		 * 资源停止
+		 * 已经播放的设置为空
+		 * 设置偏移量
+		 * 设置播放键为false
+		 */
 		if ( this.isPlaying === true ) {
 
 			this.source.stop();
@@ -132,7 +163,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this;
 
 	},
-
+	/**
+	 * 停止播放方法
+	 */
 	stop: function () {
 
 		if ( this.hasPlaybackControl === false ) {
@@ -141,7 +174,12 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 			return;
 
 		}
-
+		/**
+		 * 资源停止
+		 * 已经播放的设置为空
+		 * 偏移量设置为0
+		 * 播放键设置为false
+		 */
 		this.source.stop();
 		this.source.onended = null;
 		this.offset = 0;
@@ -150,7 +188,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this;
 
 	},
-
+	/**
+	 * 链接Audio.source的方法，
+	 */
 	connect: function () {
 
 		if ( this.filters.length > 0 ) {
