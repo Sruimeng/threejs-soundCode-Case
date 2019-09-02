@@ -5,6 +5,11 @@ import { Vector2 } from '../math/Vector2.js';
  * @author mrdoob / http://mrdoob.com/
  */
 
+/**
+ *	阴影
+ *
+ * @param {*} camera
+ */
 function LightShadow( camera ) {
 
 	this.camera = camera;
