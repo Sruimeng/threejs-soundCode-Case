@@ -1,31 +1,34 @@
 import { Matrix4 } from '../math/Matrix4.js';
 import { Vector2 } from '../math/Vector2.js';
+import { Camera } from './../cameras/Camera.d';
 
 /**
  * @author mrdoob / http://mrdoob.com/
  */
 
 /**
- *	阴影
+ *	光照阴影的基类,
  *
- * @param {*} camera
+ * @param {Camera} camera 用来生成场景的深度图的摄像机
  */
 function LightShadow( camera ) {
 
 	this.camera = camera;
-
+	//设置阴影贴图的偏差
 	this.bias = 0;
+	//设置模糊值
 	this.radius = 1;
-
+	//阴影贴图的尺寸
 	this.mapSize = new Vector2( 512, 512 );
-
+	//生成的深度渲染图
 	this.map = null;
+	//阴影的相机空间
 	this.matrix = new Matrix4();
 
 }
 
 Object.assign( LightShadow.prototype, {
-
+	//复制方法
 	copy: function ( source ) {
 
 		this.camera = source.camera.clone();
@@ -44,7 +47,7 @@ Object.assign( LightShadow.prototype, {
 		return new this.constructor().copy( this );
 
 	},
-
+	//变成json的方法
 	toJSON: function () {
 
 		var object = {};
