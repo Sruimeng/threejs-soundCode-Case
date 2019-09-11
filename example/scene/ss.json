@@ -6,7 +6,7 @@
                 "g": 1,
                 "b": 1
             },
-            "skybox": 10000012,
+            "skybox": 10000013,
             "fog_end": 1000,
             "fog_start": 1,
             "fog_color": {
@@ -102,7 +102,18 @@
                             "w": 1
                         }
                     },
-                    "cameraRuntime": {}
+                    "cameraRuntime": {
+                        "maxElevationUp": -90,
+                        "maxElevationDown": 1,
+                        "rotLerpSpeed": 0.05,
+                        "panLerpSpeed": 0.05,
+                        "zoomLerpSpeed": 0.05,
+                        "pinchSensitivity": 0.6,
+                        "yawSensitivity": 0.6,
+                        "minDistance": 0.1,
+                        "maxDistance": 5,
+                        "ratio": 2.8
+                    }
                 }
             },
             "e24cbbb8-6ea5-4bb5-943d-fc8b8e661b7e": {
@@ -187,8 +198,25 @@
                             0
                         ]
                     },
-                    "infospot":{
-                        ""
+                    "infodot":{
+                        "positions":[
+                            {
+                                "position":{
+                                    "x": 0,
+                                    "y": 3,
+                                    "z": 0
+                                },
+                                "face":"x"
+                            },
+                            {
+                                "position":{
+                                    "x": 5,
+                                    "y": 0,
+                                    "z": 5
+                                },
+                                "face":"y"
+                            }
+                        ]
                     }
                 }
             }
@@ -211,8 +239,9 @@
                         "id": "830eed5c-f616-4df1-9bd1-0cb2cbd729a1",
                         "parent": "ea130f42-04fc-4942-8ad4-ba491a772ade"
                     }
+                    
                 ],
-                "features": {
+                "components": {
                     "cameraGestures": {
                         "enable": true
                     },
@@ -255,11 +284,19 @@
                             10000011,
                             10000011
                         ]
+                    },
+                    "infodotBind":{
+                        "message":[
+                            {
+                                "element":"830eed5c-f616-4df1-9bd1-0cb2cbd729a1",
+                                "entity":"684df6b4-c6d6-11e6-89b2-22000ac481dd"
+                            }
+                        ]
                     }
                 }
             },
             {
-                "id": "e2da8b63-12a1-41b3-a843-6a10451c2cb8",
+                "id": "76bfe11a-7062-4c54-ac27-232b6ea1a4f7",
                 "pageIdx": 0,
                 "pageName": "Page 1",
                 "name": "view1",
@@ -298,7 +335,7 @@
                         "parent": "scrollbarHor"
                     }
                 ],
-                "features": {
+                "components": {
                     "cameraGestures": {
                         "enable": true
                     },
@@ -432,6 +469,7 @@
                         "repeat": 0,
                         "fill": 0,
                         "amount": 1,
+                        "opacity": 1,
                         "resource": 10000005,
                         "color": {
                             "r": 1,
@@ -444,20 +482,20 @@
                     "pattern": {
                         "postures": [
                             {
-                                "animation":{
-                                    "type":"to",
-                                    "duration":2,
-                                    "easing":"liner",
-                                    "delay":0,
-                                    "repeat":0,
-                                    "yoyo":false
+                                "animation": {
+                                    "type": "to",
+                                    "duration": 2,
+                                    "easing": "liner",
+                                    "delay": 0,
+                                    "repeat": 0,
+                                    "yoyo": false
                                 },
-                                "states":{
+                                "states": {
                                     "button1": {
-                                        "transform":{
-                                            "anchoredPosition":{
-                                                "x":-100,
-                                                "y":-100
+                                        "transform": {
+                                            "anchoredPosition": {
+                                                "x": -100,
+                                                "y": -100
                                             }
                                         },
                                         "image": {
@@ -478,20 +516,20 @@
                                 }
                             },
                             {
-                                "animation":{
-                                    "type":"to",
-                                    "duration":1,
-                                    "easing":"Linear",
-                                    "delay":0,
-                                    "repeat":0,
-                                    "yoyo":false
+                                "animation": {
+                                    "type": "to",
+                                    "duration": 1,
+                                    "easing": "Linear",
+                                    "delay": 0,
+                                    "repeat": 0,
+                                    "yoyo": false
                                 },
-                                "states":{
+                                "states": {
                                     "button1": {
-                                        "transform":{
-                                            "anchoredPosition":{
-                                                "x":100,
-                                                "y":100
+                                        "transform": {
+                                            "anchoredPosition": {
+                                                "x": 100,
+                                                "y": 100
                                             }
                                         },
                                         "image": {
@@ -593,7 +631,6 @@
                                 }
                             }
                         ],
-                        
                         "btnTrigger": true
                     },
                     "button": {}
@@ -634,12 +671,12 @@
                         "rect": {
                             "x": 0,
                             "y": 0,
-                            "width": 100,
-                            "height": 100
+                            "width": 10,
+                            "height": 10
                         },
                         "sizeDelta": {
-                            "x": -100,
-                            "y": -100
+                            "x": -10,
+                            "y": -10
                         }
                     },
                     "image": {
@@ -819,6 +856,7 @@
                         "repeat": 0,
                         "fill": 0,
                         "amount": 1,
+                        "opacity": 1,
                         "color": {
                             "r": 0.823,
                             "g": 0.862,
@@ -1126,7 +1164,6 @@
             "name": "Material #25",
             "preload": true,
             "data": {
-                "name": "Material #25",
                 "diffuse": {
                     "r": 1,
                     "g": 1,
@@ -1445,7 +1482,6 @@
             "name": "Material #25",
             "preload": true,
             "data": {
-                "name": "Material #25",
                 "diffuse": {
                     "r": 1,
                     "g": 1,
@@ -1473,7 +1509,7 @@
                     1
                 ],
                 "useMetallic": true,
-                "metallic": 1,
+                "metallic": 0.6,
                 "metallicMap": null,
                 "metallicMapUv": 0,
                 "metallicMapOffset": [
@@ -1484,7 +1520,7 @@
                     1,
                     1
                 ],
-                "roughness": 1,
+                "roughness": 0.6,
                 "roughnessMap": null,
                 "roughnessMapUv": 0,
                 "roughnessMapOffset": [
@@ -1544,7 +1580,6 @@
             "name": "yy",
             "preload": true,
             "data": {
-                "name": "Material #25",
                 "diffuse": {
                     "r": 1,
                     "g": 1,
@@ -1572,7 +1607,7 @@
                     1
                 ],
                 "useMetallic": true,
-                "metallic": 1,
+                "metallic": 0.6,
                 "metallicMap": null,
                 "metallicMapUv": 0,
                 "metallicMapOffset": [
@@ -1583,7 +1618,7 @@
                     1,
                     1
                 ],
-                "roughness": 1,
+                "roughness": 0.6,
                 "roughnessMap": null,
                 "roughnessMapUv": 0,
                 "roughnessMapOffset": [
@@ -1642,13 +1677,15 @@
         "10000012": {
             "name": "Helipad.dds",
             "preload": true,
-            "data": {
-                "minfilter": "linear_mip_linear",
-                "magfilter": "linear",
-                "magFilter": 1,
-                "minFilter": 5,
-                "anisotropy": 1,
+            "meta": {
                 "rgbm": true
+            },
+            "data": {
+                "magfilter": "linear",
+                "minfilter": "linear_mip_linear",
+                "anisotropy": 1,
+                "rgbm": true,
+                "angle": 0
             },
             "type": "cubemap",
             "file": {
@@ -1662,11 +1699,15 @@
         "10000013": {
             "name": "NewCubemap.dds",
             "preload": true,
-            "data": {
-                "magFilter": 1,
-                "minFilter": 5,
-                "anisotropy": 1,
+            "meta": {
                 "rgbm": true
+            },
+            "data": {
+                "magfilter": "linear",
+                "minfilter": "linear_mip_linear",
+                "anisotropy": 1,
+                "rgbm": true,
+                "angle": 0
             },
             "type": "cubemap",
             "file": {
