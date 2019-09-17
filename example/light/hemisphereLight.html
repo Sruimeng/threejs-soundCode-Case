@@ -75,15 +75,18 @@
         grid.material.opacity = 0.2;
         grid.material.transparent = true;
         scene.add(grid);
+        let shpereGeometry = new THREE.SphereGeometry(2, 32, 32);
+        let shpereMaterial = new THREE.MeshPhongMaterial();
+        let shereMesh = new THREE.Mesh(shpereGeometry, shpereMaterial);
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < 7; j++) {
                 for (let m = 0; m < 7; m++) {
-                    let geometry = new THREE.SphereGeometry(2, 32, 32);
-                    let material = new THREE.MeshPhongMaterial({
-                        color: new THREE.Color(0.15 * m, 0.15 * j, 0.15 * i),
+                    let mesh = shereMesh.clone();
+                    let color = new THREE.Color(0.15 * m, 0.15 * j, 0.15 * i)
+                    mesh.material = new THREE.MeshPhongMaterial({
+                        color: color,
                         envMap:envMap
                     });
-                    let mesh = new THREE.Mesh(geometry, material);
                     let y = j % 2 ? 5 * j : -5 * j;
                     let z = i % 2 ? 5 * i : -5 * i;
                     let x = m % 2 ? 5 * m : -5 * m;

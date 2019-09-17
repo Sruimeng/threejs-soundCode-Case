@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DirectionalLight</title>
+    <title>spotLight</title>
     <script src="../util/three.js"></script>
     <script src="../util/WebGL.js"></script>
     <script src="../util/stats.min.js"></script>
@@ -23,10 +23,18 @@
     <script>
         //场景
         let scene = new THREE.Scene();
+        //地面
+        let geometry = new THREE.PlaneBufferGeometry(500, 500);
+        let material = new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: true });
+        let ground = new THREE.Mesh(geometry, material);
+        ground.position.set(0, - 5, 0);
+        ground.rotation.x = - Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
         //灯光
         let ambientLight = new THREE.AmbientLight(0x111111);
         scene.add(ambientLight);
-        let directionLight = new THREE.DirectionalLight(0xffffff) //为了明显的区分没有用白色
+        let directionLight = new THREE.DirectionalLight(0xcccccc)
         directionLight.position.set(0, 100, 50);
         directionLight.castShadow = true;
         directionLight.shadow.camera.top = 64;
@@ -34,11 +42,25 @@
         directionLight.shadow.camera.left = 64;
         directionLight.shadow.camera.right = -64;
         scene.add(directionLight);
-        let directionLightHelper=new THREE.DirectionalLightHelper(directionLight,10,0xff0000);
-        scene.add(directionLightHelper);
 
-        // let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
-        // scene.add(directionLightCameraHelper);
+        let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
+        scene.add(directionLightCameraHelper);
+
+        let sphere = new THREE.SphereBufferGeometry(1, 16, 16);
+        let spotLight = new THREE.SpotLight(0xffff00, 2.0, 150);
+        spotLight.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xff00ff })));
+        spotLight.position.y = 100;
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 10;
+        spotLight.shadow.camera.far = 150;
+        spotLight.shadow.camera.fov = 45;
+        scene.add(spotLight);
+        spotLight.target = ground;
+        scene.add(spotLight.target);
+        let spotLightHelper = new THREE.SpotLightHelper(spotLight, 10, 0x00ff00);
+        scene.add(spotLightHelper);
         //摄像机
         let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(100, 100, 100);
@@ -55,14 +77,7 @@
         envMap.format = THREE.RGBFormat;
         scene.background = envMap;
         //物体
-        var geometry = new THREE.PlaneBufferGeometry(500, 500);
-        var material = new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: true });
-        var ground = new THREE.Mesh(geometry, material);
-        ground.position.set(0, - 5, 0);
-        ground.rotation.x = - Math.PI / 2;
-        ground.receiveShadow = true;
-        scene.add(ground);
-        var grid = new THREE.GridHelper(500, 100, 0x000000, 0x000000);
+        let grid = new THREE.GridHelper(500, 100, 0x000000, 0x000000);
         grid.position.y = - 5;
         grid.material.opacity = 0.2;
         grid.material.transparent = true;
@@ -118,6 +133,9 @@
             render();
             stats.update();
             controls.update();
+            let time = Date.now() * 0.00025;
+            spotLight.position.x = 30 * Math.sin(time);
+            spotLight.position.z = 30 * Math.sin(time);
         }
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
