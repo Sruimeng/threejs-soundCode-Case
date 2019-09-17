@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DirectionalLight</title>
+    <title>PointLight</title>
     <script src="../util/three.js"></script>
     <script src="../util/WebGL.js"></script>
     <script src="../util/stats.min.js"></script>
@@ -34,11 +34,22 @@
         directionLight.shadow.camera.left = 64;
         directionLight.shadow.camera.right = -64;
         scene.add(directionLight);
-        let directionLightHelper=new THREE.DirectionalLightHelper(directionLight,10,0xff0000);
-        scene.add(directionLightHelper);
 
-        // let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
-        // scene.add(directionLightCameraHelper);
+        let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
+        scene.add(directionLightCameraHelper);
+
+        let sphere = new THREE.SphereBufferGeometry(1, 16, 16);
+        let pointLight = new THREE.PointLight(0xff0000, 5, 50);
+        pointLight.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xff0040 })));
+        pointLight.position.z = -3.5;
+        pointLight.castShadow = true;
+        pointLight.shadow.camera.near = 0.1;
+        pointLight.shadow.camera.far = 600;
+        pointLight.shadow.bias = - 0.005;
+        scene.add(pointLight);
+
+        let pointLightHelper = new THREE.PointLightHelper(pointLight,10,0x00ff00);
+        scene.add(pointLightHelper);
         //摄像机
         let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(100, 100, 100);
@@ -73,7 +84,7 @@
                     let geometry = new THREE.SphereGeometry(2, 32, 32);
                     let material = new THREE.MeshPhongMaterial({
                         color: new THREE.Color(0.15 * m, 0.15 * j, 0.15 * i),
-                        envMap:envMap
+                        envMap: envMap
                     });
                     let mesh = new THREE.Mesh(geometry, material);
                     let y = j % 2 ? 5 * j : -5 * j;
@@ -115,6 +126,10 @@
             render();
             stats.update();
             controls.update();
+            var time = Date.now() * 0.00025;
+            pointLight.position.y = 30 * Math.abs(Math.sin(time)) + 1;
+            pointLight.position.x = 30 * Math.sin(time) + 1;
+            pointLight.position.z = 30 * Math.sin(time) + 1;
         }
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
