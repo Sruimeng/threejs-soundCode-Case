@@ -6,11 +6,12 @@
     <meta name="viewport"
         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DirectionalLight</title>
+    <title>rectAreaLight</title>
     <script src="../util/three.js"></script>
     <script src="../util/WebGL.js"></script>
     <script src="../util/stats.min.js"></script>
     <script src="../util/OrbitControls.js"></script>
+    <script src="../util/RectAreaLightUniformsLib.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -21,20 +22,20 @@
 <body>
     <div id="WebGLOutput" class="webgl" style="width:100%;height: 100%;"></div>
     <script>
-        
         //场景
         let scene = new THREE.Scene();
-        let planGeometry = new THREE.PlaneGeometry(300, 300, 32);
-        let planMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-        let plane = new THREE.Mesh(planGeometry, planMaterial);
-        plane.receiveShadow = true;
-        plane.rotation.z = Math.PI / 2;
-        plane.position.z = 25;
-        scene.add(plane);
+        //地面
+        let geometry = new THREE.PlaneBufferGeometry(500, 500);
+        let material = new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: true });
+        let ground = new THREE.Mesh(geometry, material);
+        ground.position.set(0, - 5, 0);
+        ground.rotation.x = - Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
         //灯光
         let ambientLight = new THREE.AmbientLight(0x111111);
         scene.add(ambientLight);
-        let directionLight = new THREE.DirectionalLight(0xffffff) //为了明显的区分没有用白色
+        let directionLight = new THREE.DirectionalLight(0xcccccc)
         directionLight.position.set(0, 100, 50);
         directionLight.castShadow = true;
         directionLight.shadow.camera.top = 64;
@@ -42,11 +43,33 @@
         directionLight.shadow.camera.left = 64;
         directionLight.shadow.camera.right = -64;
         scene.add(directionLight);
-        let directionLightHelper=new THREE.DirectionalLightHelper(directionLight,10,0xff0000);
-        scene.add(directionLightHelper);
 
-        // let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
-        // scene.add(directionLightCameraHelper);
+        let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
+        scene.add(directionLightCameraHelper);
+
+        let rectLight = new THREE.RectAreaLight(0xffffff, 1.5, 30, 30);
+        rectLight.position.set(50, 50, 0);
+        rectLight.lookAt(0, 0, 0);
+        scene.add(rectLight)
+
+        let rectLightHelper = new THREE.RectAreaLightHelper(rectLight);
+        rectLight.add(rectLightHelper);
+
+        let sphere = new THREE.SphereBufferGeometry(1, 16, 16);
+        let spotLight = new THREE.SpotLight(0xffff00, 2.0, 150);
+        spotLight.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xff00ff })));
+        spotLight.position.y = 100;
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 10;
+        spotLight.shadow.camera.far = 150;
+        spotLight.shadow.camera.fov = 45;
+        scene.add(spotLight);
+        spotLight.target = ground;
+        scene.add(spotLight.target);
+        let spotLightHelper = new THREE.SpotLightHelper(spotLight, 10, 0x00ff00);
+        scene.add(spotLightHelper);
         //摄像机
         let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(100, 100, 100);
@@ -63,29 +86,22 @@
         envMap.format = THREE.RGBFormat;
         scene.background = envMap;
         //物体
-        var geometry = new THREE.PlaneBufferGeometry(500, 500);
-        var material = new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: true });
-        var ground = new THREE.Mesh(geometry, material);
-        ground.position.set(0, - 5, 0);
-        ground.rotation.x = - Math.PI / 2;
-        ground.receiveShadow = true;
-        scene.add(ground);
-        var grid = new THREE.GridHelper(500, 100, 0x000000, 0x000000);
+        let grid = new THREE.GridHelper(500, 100, 0x000000, 0x000000);
         grid.position.y = - 5;
         grid.material.opacity = 0.2;
         grid.material.transparent = true;
         scene.add(grid);
         let shpereGeometry = new THREE.SphereGeometry(2, 32, 32);
-        let shpereMaterial = new THREE.MeshPhongMaterial();
+        let shpereMaterial = new THREE.MeshStandardMaterial();
         let shereMesh = new THREE.Mesh(shpereGeometry, shpereMaterial);
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < 7; j++) {
                 for (let m = 0; m < 7; m++) {
                     let mesh = shereMesh.clone();
                     let color = new THREE.Color(0.15 * m, 0.15 * j, 0.15 * i)
-                    mesh.material = new THREE.MeshPhongMaterial({
+                    mesh.material = new THREE.MeshStandardMaterial({
                         color: color,
-                        envMap:envMap
+                        envMap: envMap
                     });
                     let y = j % 2 ? 5 * j : -5 * j;
                     let z = i % 2 ? 5 * i : -5 * i;
@@ -98,12 +114,13 @@
         }
 
 
-        var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-        scene.add(helper);
         //渲染器
         let renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.gammaInput = true;
+        renderer.gammaOutput = true;
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("WebGLOutput").appendChild(renderer.domElement);
         //其他
@@ -128,6 +145,9 @@
             render();
             stats.update();
             controls.update();
+            let time = Date.now() * 0.00025;
+            spotLight.position.x = 30 * Math.sin(time);
+            spotLight.position.z = 30 * Math.sin(time);
         }
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;

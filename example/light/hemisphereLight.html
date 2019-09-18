@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DirectionalLight</title>
+    <title>HemisphereLight</title>
     <script src="../util/three.js"></script>
     <script src="../util/WebGL.js"></script>
     <script src="../util/stats.min.js"></script>
@@ -21,20 +21,12 @@
 <body>
     <div id="WebGLOutput" class="webgl" style="width:100%;height: 100%;"></div>
     <script>
-        
         //场景
         let scene = new THREE.Scene();
-        let planGeometry = new THREE.PlaneGeometry(300, 300, 32);
-        let planMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-        let plane = new THREE.Mesh(planGeometry, planMaterial);
-        plane.receiveShadow = true;
-        plane.rotation.z = Math.PI / 2;
-        plane.position.z = 25;
-        scene.add(plane);
         //灯光
         let ambientLight = new THREE.AmbientLight(0x111111);
         scene.add(ambientLight);
-        let directionLight = new THREE.DirectionalLight(0xffffff) //为了明显的区分没有用白色
+        let directionLight = new THREE.DirectionalLight(0xcccccc);
         directionLight.position.set(0, 100, 50);
         directionLight.castShadow = true;
         directionLight.shadow.camera.top = 64;
@@ -44,9 +36,17 @@
         scene.add(directionLight);
         let directionLightHelper=new THREE.DirectionalLightHelper(directionLight,10,0xff0000);
         scene.add(directionLightHelper);
-
         // let directionLightCameraHelper = new THREE.CameraHelper(directionLight.shadow.camera);
         // scene.add(directionLightCameraHelper);
+
+        let hemisphereLight = new THREE.HemisphereLight( 0xff0000, 0x00ff00, 0.6 );
+        hemisphereLight.position.set( 0, 100, 0 );
+        scene.add( hemisphereLight );
+        
+        let hemisphereLightHelper=new THREE.HemisphereLightHelper(hemisphereLight,10,0xff0000);
+        scene.add(hemisphereLightHelper);
+
+
         //摄像机
         let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(100, 100, 100);
@@ -98,8 +98,6 @@
         }
 
 
-        var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-        scene.add(helper);
         //渲染器
         let renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);
