@@ -6,6 +6,10 @@ import { Object3D } from '../core/Object3D.js';
  * @author ikerr / http://verold.com
  */
 
+/**
+ * @description 骨骼方法，用来创建动画中的骨骼动画
+ * 
+ */
 function Bone() {
 
 	Object3D.call( this );

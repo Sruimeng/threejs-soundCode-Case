@@ -11,6 +11,13 @@ import { Float32BufferAttribute } from '../core/BufferAttribute.js';
  * @author mrdoob / http://mrdoob.com/
  */
 
+/**
+ * @description 
+ * 
+ * @param {any} geometry 
+ * @param {any} material 
+ * @param {any} mode 
+ */
 function Line( geometry, material, mode ) {
 
 	if ( mode === 1 ) {

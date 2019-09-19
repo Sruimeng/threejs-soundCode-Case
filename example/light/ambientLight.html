@@ -22,8 +22,8 @@
         //场景
         let scene = new THREE.Scene();
         //灯光
-        let ambientlight= new THREE.AmbientLight( 0xffffff ) //为了明显的区分没有用白色
-        scene.add(ambientlight)
+        let ambientlight= new THREE.AmbientLight( 0xffffff );
+        scene.add(ambientlight);
         //摄像机
         let camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
         camera.position.set( 100, 100, 100 );
