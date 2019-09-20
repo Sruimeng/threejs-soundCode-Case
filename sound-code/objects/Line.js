@@ -12,11 +12,13 @@ import { Float32BufferAttribute } from '../core/BufferAttribute.js';
  */
 
 /**
- * @description 
+ * @description 线对象，同时也是线对象的基类，在webgl中线有三种形式，分别为gl.LINES,gl.LINE_STRIP和gl.LINE_LOOP
+ * 三种线分别表示，线段、正常的按点来连接的线和最后一个点和首个点连接的线，Line方法作为基类，接收三个参数分别为，组成先的
+ * 顶点，线的材质，跟模式（补坑的，现在已经不用这个了，之前是这三种合在一块用，现在分了三个类来用，感觉后者更好）
  * 
- * @param {any} geometry 
- * @param {any} material 
- * @param {any} mode 
+ * @param {any} geometry 线的顶点
+ * @param {any} material 线的材质
+ * @param {any} mode 模式(现在已经不用这个了，之前是这三种合在一块用)
  */
 function Line( geometry, material, mode ) {
 
@@ -27,9 +29,9 @@ function Line( geometry, material, mode ) {
 	}
 
 	Object3D.call( this );
-
+	//设置材质
 	this.type = 'Line';
-
+	//设置顶点和材质
 	this.geometry = geometry !== undefined ? geometry : new BufferGeometry();
 	this.material = material !== undefined ? material : new LineBasicMaterial( { color: Math.random() * 0xffffff } );
 
@@ -40,7 +42,7 @@ Line.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	constructor: Line,
 
 	isLine: true,
-
+	//计算线段的总长度
 	computeLineDistances: ( function () {
 
 		var start = new Vector3();
@@ -49,7 +51,7 @@ Line.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return function computeLineDistances() {
 
 			var geometry = this.geometry;
-
+			//首先判断时候为bufferGeometry
 			if ( geometry.isBufferGeometry ) {
 
 				// we assume non-indexed geometry
@@ -98,7 +100,7 @@ Line.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		};
 
 	}() ),
-
+	//射线判断一个射线和该线是否相交的
 	raycast: ( function () {
 
 		var inverseMatrix = new Matrix4();
@@ -250,7 +252,7 @@ Line.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		};
 
 	}() ),
-
+	//复制方法
 	copy: function ( source ) {
 
 		Object3D.prototype.copy.call( this, source );
@@ -261,7 +263,7 @@ Line.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this;
 
 	},
-
+	//克隆方法
 	clone: function () {
 
 		return new this.constructor().copy( this );

@@ -6,6 +6,13 @@ import { Float32BufferAttribute } from '../core/BufferAttribute.js';
  * @author mrdoob / http://mrdoob.com/
  */
 
+/**
+ * @description  LineSegments方法继承的是Line的基类，它绘制的是一个一个的线段
+ * 用的是gl.LINES
+ * 
+ * @param {any} geometry 
+ * @param {any} material 
+ */
 function LineSegments( geometry, material ) {
 
 	Line.call( this, geometry, material );
