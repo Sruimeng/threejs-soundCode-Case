@@ -11,6 +11,15 @@ import { PerspectiveCamera } from './PerspectiveCamera.js';
  * @author alteredq / http://alteredqualia.com/
  */
 
+/**
+ * @description CubeCamera就是创建六个摄像机，通过摄像机中拍摄中的东西放到WebGLRenderTargetCube，然后这个可以
+ * 当做纹理放到一个物体上以模拟真实的镜像效果
+ * 
+ * @param {Number} near 近剪裁面的距离
+ * @param {Number} far 远剪裁面的距离
+ * @param {Number} cubeResolution 设置立方体边缘的长度
+ * @param {any} options 参数，主要包括过滤器及颜色编码啥的
+ */
 function CubeCamera( near, far, cubeResolution, options ) {
 
 	Object3D.call( this );
@@ -50,10 +59,10 @@ function CubeCamera( near, far, cubeResolution, options ) {
 	this.add( cameraNZ );
 
 	options = options || { format: RGBFormat, magFilter: LinearFilter, minFilter: LinearFilter };
-
+	//this.renderTarget.texture可以用来给其他物体做贴图
 	this.renderTarget = new WebGLRenderTargetCube( cubeResolution, cubeResolution, options );
 	this.renderTarget.texture.name = "CubeCamera";
-
+	//更新方法
 	this.update = function ( renderer, scene ) {
 
 		if ( this.parent === null ) this.updateMatrixWorld();
@@ -88,7 +97,7 @@ function CubeCamera( near, far, cubeResolution, options ) {
 		renderer.setRenderTarget( currentRenderTarget );
 
 	};
-
+	//清空方法
 	this.clear = function ( renderer, color, depth, stencil ) {
 
 		var currentRenderTarget = renderer.getRenderTarget();

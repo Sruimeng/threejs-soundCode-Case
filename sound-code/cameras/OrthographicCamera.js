@@ -6,6 +6,16 @@ import { Object3D } from '../core/Object3D.js';
  * @author arose / http://github.com/arose
  */
 
+/**
+ * @description 正交摄像机，采用了正交投影，继承自Camera基类
+ * 
+ * @param {any} left 
+ * @param {any} right 
+ * @param {any} top 
+ * @param {any} bottom 
+ * @param {any} near 
+ * @param {any} far 
+ */
 function OrthographicCamera( left, right, top, bottom, near, far ) {
 
 	Camera.call( this );
