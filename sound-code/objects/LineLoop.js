@@ -6,7 +6,7 @@ import { Line } from './Line.js';
 
 /**
  * @description LineLoop方法继承的是Line的基类，它绘制一条直线到下一个顶点，并将最后一个顶点连回第一个顶点。
- * 用的是gl.LINE_LOOP
+ * 用的是gl.LINE_LOOP。
  * 
  * @param {any} geometry 
  * @param {any} material 
