@@ -69,7 +69,8 @@ function Mesh(geometry, material) {
 这将会使得一个序列中的每一个三角形（由(v0, v1, v2)，(v0, v2, v3)，(v0, v3, v4)，……给定）共享它们的第一个顶点（就像风扇一样）。
 	 */
 	this.drawMode = TrianglesDrawMode;
-
+	//更新变形存储的数组 用来更新morphTargetInfluences和morphTargetDictionary
+	//前者是一个权重数组指定了用了多少变形，后者是一个基于morphTarget.name属性的morphTargets的字典。 默认情况下是未定义的，但是会被updateMorphTargets重建。
 	this.updateMorphTargets();
 
 }
@@ -79,13 +80,13 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 	constructor: Mesh,
 
 	isMesh: true,
-
+	//设置绘制模式
 	setDrawMode: function (value) {
 
 		this.drawMode = value;
 
 	},
-
+	//复制方法
 	copy: function (source) {
 
 		Object3D.prototype.copy.call(this, source);
@@ -107,12 +108,12 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 		return this;
 
 	},
-
+	//更新变形方法
 	updateMorphTargets: function () {
 
 		var geometry = this.geometry;
 		var m, ml, name;
-
+		//先判断是否为BufferGeometry
 		if (geometry.isBufferGeometry) {
 
 			var morphAttributes = geometry.morphAttributes;
@@ -153,7 +154,8 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 		}
 
 	},
-
+	//在一条投射出去的Ray（射线）和这个网格之间产生交互。 Raycaster.intersectObject将会调用这个方法。
+	//判断该物体和射线是否相交的方法
 	raycast: (function () {
 
 		var inverseMatrix = new Matrix4();
@@ -246,12 +248,11 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 			if (material === undefined) return;
 
 			// Checking boundingSphere distance to ray
-
+			//下面这一段就是检查射线和物体的球体跟box包围盒是否相交
 			if (geometry.boundingSphere === null) geometry.computeBoundingSphere();
-
+			//获得包围盒中的distance在世界坐标系中的位置
 			sphere.copy(geometry.boundingSphere);
 			sphere.applyMatrix4(matrixWorld);
-
 			if (raycaster.ray.intersectsSphere(sphere) === false) return;
 
 			//
@@ -284,25 +285,25 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 				if (index !== null) {
 
 					// indexed buffer geometry
-
+					//判断material是否为数组
 					if (Array.isArray(material)) {
-
+						//遍历材质数组
 						for (i = 0, il = groups.length; i < il; i++) {
 
 							group = groups[i];
 							groupMaterial = material[group.materialIndex];
-
+							//获得geometry的起点和终点
 							start = Math.max(group.start, drawRange.start);
 							end = Math.min((group.start + group.count), (drawRange.start + drawRange.count));
-
+							//遍历index里的数组
 							for (j = start, jl = end; j < jl; j += 3) {
 
 								a = index.getX(j);
 								b = index.getX(j + 1);
 								c = index.getX(j + 2);
-
+								//判断射线和geometry中的依次的三个焦点组成的三角形是否相交
 								intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, ray, position, uv, a, b, c);
-
+								//如果相交，把信息储存起来
 								if (intersection) {
 
 									intersection.faceIndex = Math.floor(j / 3); // triangle number in indexed buffer semantics
@@ -316,7 +317,7 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 						}
 
 					} else {
-
+						//获得geometry的起点和终点
 						start = Math.max(0, drawRange.start);
 						end = Math.min(index.count, (drawRange.start + drawRange.count));
 
@@ -325,7 +326,7 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 							a = index.getX(i);
 							b = index.getX(i + 1);
 							c = index.getX(i + 2);
-
+							//判断射线和geometry中的依次的三个焦点组成的三角形是否相交
 							intersection = checkBufferGeometryIntersection(this, material, raycaster, ray, position, uv, a, b, c);
 
 							if (intersection) {
@@ -342,9 +343,10 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 				} else if (position !== undefined) {
 
 					// non-indexed buffer geometry
-
+					//如果是没有index的buffergeometry
+					//首先也是判断material是否为数组
 					if (Array.isArray(material)) {
-
+						//和上述处理类似，但是有没有可能去整合一下
 						for (i = 0, il = groups.length; i < il; i++) {
 
 							group = groups[i];
@@ -400,7 +402,7 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 				}
 
 			} else if (geometry.isGeometry) {
-
+				//如果不是buffergeometry
 				var fvA, fvB, fvC;
 				var isMultiMaterial = Array.isArray(material);
 
@@ -410,9 +412,9 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 
 				var faceVertexUvs = geometry.faceVertexUvs[0];
 				if (faceVertexUvs.length > 0) uvs = faceVertexUvs;
-
+				//遍历faces
 				for (var f = 0, fl = faces.length; f < fl; f++) {
-
+					//获得坐标
 					var face = faces[f];
 					var faceMaterial = isMultiMaterial ? material[face.materialIndex] : material;
 
@@ -421,7 +423,7 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 					fvA = vertices[face.a];
 					fvB = vertices[face.b];
 					fvC = vertices[face.c];
-
+					//判断material 变形变量 （动画会用到）
 					if (faceMaterial.morphTargets === true) {
 
 						var morphTargets = geometry.morphTargets;
@@ -454,7 +456,7 @@ Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 						fvC = vC;
 
 					}
-
+					//下面的东西和再上面的差不多
 					intersection = checkIntersection(this, faceMaterial, raycaster, ray, fvA, fvB, fvC, intersectionPoint);
 
 					if (intersection) {

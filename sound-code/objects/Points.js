@@ -5,13 +5,21 @@ import { Object3D } from '../core/Object3D.js';
 import { Vector3 } from '../math/Vector3.js';
 import { PointsMaterial } from '../materials/PointsMaterial.js';
 import { BufferGeometry } from '../core/BufferGeometry.js';
+import { Geometry } from '../core/Geometry.js';
+import { Material } from '../materials/Material.js';
 
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
+/**
+ * @description 一个用于显示点的类。 由WebGLRenderer渲染的点使用 gl.POINTS。
+ * 
+ * @param {Geometry} geometry 
+ * @param {Material} material 
+ */
 function Points( geometry, material ) {
-
+	//继承自Object3D对象
 	Object3D.call( this );
 
 	this.type = 'Points';
@@ -26,7 +34,7 @@ Points.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	constructor: Points,
 
 	isPoints: true,
-
+	//点也是可以和射线【判断是否相交的
 	raycast: ( function () {
 
 		var inverseMatrix = new Matrix4();
@@ -38,10 +46,11 @@ Points.prototype = Object.assign( Object.create( Object3D.prototype ), {
 			var object = this;
 			var geometry = this.geometry;
 			var matrixWorld = this.matrixWorld;
+			//阈值
 			var threshold = raycaster.params.Points.threshold;
 
 			// Checking boundingSphere distance to ray
-
+			//判断包围盒是否存在
 			if ( geometry.boundingSphere === null ) geometry.computeBoundingSphere();
 
 			sphere.copy( geometry.boundingSphere );
@@ -59,7 +68,7 @@ Points.prototype = Object.assign( Object.create( Object3D.prototype ), {
 			var localThresholdSq = localThreshold * localThreshold;
 			var position = new Vector3();
 			var intersectPoint = new Vector3();
-
+			//判断点和射线是否相交
 			function testPoint( point, index ) {
 
 				var rayPointDistanceSq = ray.distanceSqToPoint( point );

@@ -7,23 +7,28 @@ import { Matrix4 } from '../math/Matrix4.js';
  * @author ikerr / http://verold.com
  */
 
+/**
+ * @description 骨架对象，就是动画中的骨骼动画的包裹对象
+ * 
+ * @param {Array} bones  包含有一组bone的数组，默认值是一个空数组。
+ * @param {Array} boneInverses （可选） 包含Matrix4的数组。
+ */
 function Skeleton( bones, boneInverses ) {
 
 	// copy the bone array
-
 	bones = bones || [];
 
 	this.bones = bones.slice( 0 );
 	this.boneMatrices = new Float32Array( this.bones.length * 16 );
 
 	// use the supplied bone inverses or calculate the inverses
-
+	//判断有没有逆bone，如果没有先创建boneInverses，然后再进行相关处理
 	if ( boneInverses === undefined ) {
 
 		this.calculateInverses();
 
 	} else {
-
+		//先判断bone和逆bone的长度是否相等
 		if ( this.bones.length === boneInverses.length ) {
 
 			this.boneInverses = boneInverses.slice( 0 );
@@ -47,7 +52,7 @@ function Skeleton( bones, boneInverses ) {
 }
 
 Object.assign( Skeleton.prototype, {
-
+	//生成boneInverses数组
 	calculateInverses: function () {
 
 		this.boneInverses = [];
@@ -67,13 +72,13 @@ Object.assign( Skeleton.prototype, {
 		}
 
 	},
-
+	//返回骨架的基本姿势
 	pose: function () {
 
 		var bone, i, il;
 
 		// recover the bind-time world matrices
-
+		//恢复到绑定的那个时间点的世界矩阵
 		for ( i = 0, il = this.bones.length; i < il; i ++ ) {
 
 			bone = this.bones[ i ];
@@ -87,7 +92,7 @@ Object.assign( Skeleton.prototype, {
 		}
 
 		// compute the local matrices, positions, rotations and scales
-
+		//计算本地的矩阵，位置，旋转和缩放
 		for ( i = 0, il = this.bones.length; i < il; i ++ ) {
 
 			bone = this.bones[ i ];
@@ -112,7 +117,7 @@ Object.assign( Skeleton.prototype, {
 		}
 
 	},
-
+	//更新方法
 	update: ( function () {
 
 		var offsetMatrix = new Matrix4();
@@ -126,11 +131,11 @@ Object.assign( Skeleton.prototype, {
 			var boneTexture = this.boneTexture;
 
 			// flatten bone matrices to array
-
+			//这应该是播放骨架动画
 			for ( var i = 0, il = bones.length; i < il; i ++ ) {
 
 				// compute the offset between the current and the original transform
-
+				//计算当前和原始变换之间的偏移量
 				var matrix = bones[ i ] ? bones[ i ].matrixWorld : identityMatrix;
 
 				offsetMatrix.multiplyMatrices( matrix, boneInverses[ i ] );
@@ -147,13 +152,13 @@ Object.assign( Skeleton.prototype, {
 		};
 
 	} )(),
-
+	//克隆方法
 	clone: function () {
 
 		return new Skeleton( this.bones, this.boneInverses );
 
 	},
-
+	//通过名字获得bone 这种设计很好，可以抄
 	getBoneByName: function ( name ) {
 
 		for ( var i = 0, il = this.bones.length; i < il; i ++ ) {

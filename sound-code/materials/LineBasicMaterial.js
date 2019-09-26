@@ -15,6 +15,11 @@ import { Color } from '../math/Color.js';
  * }
  */
 
+/**
+ * @description 线的基础材质
+ * 
+ * @param {any} parameters 
+ */
 function LineBasicMaterial( parameters ) {
 
 	Material.call( this );

@@ -7151,7 +7151,6 @@
  * 接收16进制的颜色
  */
 			} else if (m = /^\#([A-Fa-f0-9]+)$/.exec(style)) {
-				console.log(m);
 				// hex color
 
 				var hex = m[1];
@@ -15216,8 +15215,9 @@
 				if (geometry.boundingSphere === null) geometry.computeBoundingSphere();
 
 				sphere.copy(geometry.boundingSphere);
+				// console.log(sphere);
 				sphere.applyMatrix4(matrixWorld);
-
+				// console.log(sphere);
 				if (raycaster.ray.intersectsSphere(sphere) === false) return;
 
 				//
@@ -15234,7 +15234,6 @@
 				}
 
 				var intersection;
-
 				if (geometry.isBufferGeometry) {
 
 					var a, b, c;
@@ -15246,7 +15245,8 @@
 					var i, j, il, jl;
 					var group, groupMaterial;
 					var start, end;
-
+					console.log(index);
+					console.log(material);
 					if (index !== null) {
 
 						// indexed buffer geometry
@@ -27507,6 +27507,7 @@
 				if (geometry.boundingSphere === null) geometry.computeBoundingSphere();
 
 				sphere.copy(geometry.boundingSphere);
+			
 				sphere.applyMatrix4(matrixWorld);
 				sphere.radius += threshold;
 
