@@ -1,6 +1,7 @@
 import { Light } from './Light.js';
 import { PerspectiveCamera } from '../cameras/PerspectiveCamera.js';
 import { LightShadow } from './LightShadow.js';
+import { Color } from '../math/Color.js';
 
 /**
  * @author mrdoob / http://mrdoob.com/
@@ -10,10 +11,10 @@ import { LightShadow } from './LightShadow.js';
 /**
  * point光和spot光的区别在于point是向四周发射光，而spot则是类似一个椎体的光
  * 从一个点向各个方向发射的光源。一个常见的例子是模拟一个灯泡发出的光。 
- * @param {*} color
- * @param {*} intensity
- * @param {*} distance
- * @param {*} decay
+ * @param {Color} color 光源颜色
+ * @param {Number} intensity	光源强度
+ * @param {Number} distance 光源距离
+ * @param {Number} decay 沿着光照距离的衰退量
  */
 function PointLight( color, intensity, distance, decay ) {
 
