@@ -12,19 +12,26 @@ import { BufferGeometry } from '../core/BufferGeometry.js';
 import { InterleavedBuffer } from '../core/InterleavedBuffer.js';
 import { InterleavedBufferAttribute } from '../core/InterleavedBufferAttribute.js';
 import { SpriteMaterial } from '../materials/SpriteMaterial.js';
+import { Material } from '../materials/Material.js';
 
 var geometry;
 
+/**
+ * @description 精灵对象，用来展示特效精灵是一个总是面朝着摄像机的平面，通常含有使用一个半透明的纹理。
+ * 精灵不会投射任何阴影，即使设置了castShadow = true也不会有任何效果
+ * 
+ * @param {Material} material 
+ */
 function Sprite( material ) {
-
+	//继承自Object3D
 	Object3D.call( this );
 
 	this.type = 'Sprite';
-
+	//如果geometry未定义的话，创建一个buffergeometry
 	if ( geometry === undefined ) {
 
 		geometry = new BufferGeometry();
-
+		//创建一个边长唯一的正方形
 		var float32Array = new Float32Array( [
 			- 0.5, - 0.5, 0, 0, 0,
 			0.5, - 0.5, 0, 1, 0,
@@ -39,10 +46,10 @@ function Sprite( material ) {
 		geometry.addAttribute( 'uv', new InterleavedBufferAttribute( interleavedBuffer, 2, 3, false ) );
 
 	}
-
+	//设置geome和材质
 	this.geometry = geometry;
 	this.material = ( material !== undefined ) ? material : new SpriteMaterial();
-
+	//设置中心
 	this.center = new Vector2( 0.5, 0.5 );
 
 }
@@ -52,7 +59,7 @@ Sprite.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	constructor: Sprite,
 
 	isSprite: true,
-
+	//判断射线和精灵是否相交的方法
 	raycast: ( function () {
 
 		var intersectPoint = new Vector3();
@@ -99,7 +106,7 @@ Sprite.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		}
 
 		return function raycast( raycaster, intersects ) {
-
+			//获取世界的缩放比
 			worldScale.setFromMatrixScale( this.matrixWorld );
 			viewWorldMatrix.getInverse( this.modelViewMatrix ).premultiply( this.matrixWorld );
 			mvPosition.setFromMatrixPosition( this.modelViewMatrix );
@@ -114,7 +121,7 @@ Sprite.prototype = Object.assign( Object.create( Object3D.prototype ), {
 			}
 
 			var center = this.center;
-
+			//将当前坐标变形到摄像机的矩阵中，然后再去计算，射线和这些点组成的三角形是否相交。
 			transformVertex( vA.set( - 0.5, - 0.5, 0 ), mvPosition, center, worldScale, sin, cos );
 			transformVertex( vB.set( 0.5, - 0.5, 0 ), mvPosition, center, worldScale, sin, cos );
 			transformVertex( vC.set( 0.5, 0.5, 0 ), mvPosition, center, worldScale, sin, cos );
@@ -140,7 +147,7 @@ Sprite.prototype = Object.assign( Object.create( Object3D.prototype ), {
 				}
 
 			}
-
+			//判断与射线之间的距离
 			var distance = raycaster.ray.origin.distanceTo( intersectPoint );
 
 			if ( distance < raycaster.near || distance > raycaster.far ) return;
@@ -158,13 +165,13 @@ Sprite.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		};
 
 	}() ),
-
+	//克隆方法
 	clone: function () {
 
 		return new this.constructor( this.material ).copy( this );
 
 	},
-
+	//复制方法
 	copy: function ( source ) {
 
 		Object3D.prototype.copy.call( this, source );

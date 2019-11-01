@@ -127,7 +127,7 @@ Object.assign(Box2.prototype, {
 
 	},
 	/**
-	 * @description 判断是否为空包围盒，判断依据为
+	 * @description 获得中心点
 	 * @date 2019-05-24
 	 * @returns 返回本包围盒
 	 */
@@ -139,7 +139,7 @@ Object.assign(Box2.prototype, {
 			target = new Vector2();
 
 		}
-
+		//如果中心点
 		return this.isEmpty() ? target.set(0, 0) : target.addVectors(this.min, this.max).multiplyScalar(0.5);
 
 	},

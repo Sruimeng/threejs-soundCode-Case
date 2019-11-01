@@ -6,18 +6,23 @@ import { PerspectiveCamera } from './PerspectiveCamera.js';
  * @author mrdoob / http://mrdoob.com/
  */
 
+/**
+ * @description 双透视摄像机（立体相机）常被用于创建3D Anaglyph（3D立体影像）或者Parallax Barrier（视差效果）。
+ * 看了看例子就是有两个摄像机，即可以用来作为3D立体的影像处理，也可以用来做特效，比如视差的效果
+ * 
+ */
 function StereoCamera() {
 
 	this.type = 'StereoCamera';
 
 	this.aspect = 1;
-
+	//也是类似于偏移量之类的
 	this.eyeSep = 0.064;
-
+	//左摄像机，它被加入到了layer 1中 —— 需要被左摄像机渲染的物体也应当要加入到这一层中。
 	this.cameraL = new PerspectiveCamera();
 	this.cameraL.layers.enable( 1 );
 	this.cameraL.matrixAutoUpdate = false;
-
+	//右摄像机，它被加入到了layer 2中 —— 需要被右摄像机渲染的物体也应当要加入到这一层中。
 	this.cameraR = new PerspectiveCamera();
 	this.cameraR.layers.enable( 2 );
 	this.cameraR.matrixAutoUpdate = false;

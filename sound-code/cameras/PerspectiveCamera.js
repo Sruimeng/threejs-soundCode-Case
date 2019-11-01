@@ -9,6 +9,15 @@ import { _Math } from '../math/Math.js';
  * @author tschw
  */
 
+/**
+ * @description 透视相机，简单来说就是远小近大，远处的物体在摄像机的
+ * 角度看起来要比近处的物体要小，符合透视投影的基本规则，和正交相机一样继承自Camera基类。
+ * 
+ * @param {any} fov 视角的大小
+ * @param {any} aspect 视锥体的长宽比
+ * @param {any} near  摄像机视锥体近端面
+ * @param {any} far  摄像机视锥体近端面
+ */
 function PerspectiveCamera( fov, aspect, near, far ) {
 
 	Camera.call( this );
@@ -24,10 +33,11 @@ function PerspectiveCamera( fov, aspect, near, far ) {
 
 	this.aspect = aspect !== undefined ? aspect : 1;
 	this.view = null;
-
+	//胶片尺寸，其默认值为35（毫米）。 这个参数不会影响摄像机的投影矩阵，除非.filmOffset被设置为了一个非零的值。
 	this.filmGauge = 35;	// width of the film (default in millimeters)
+	//偏移量
 	this.filmOffset = 0;	// horizontal film offset (same unit as gauge)
-
+	//更新投影矩阵
 	this.updateProjectionMatrix();
 
 }
@@ -37,7 +47,7 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 	constructor: PerspectiveCamera,
 
 	isPerspectiveCamera: true,
-
+	//复制方法
 	copy: function ( source, recursive ) {
 
 		Camera.prototype.copy.call( this, source, recursive );
@@ -67,6 +77,7 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 	 *
 	 * Values for focal length and film gauge must have the same unit.
 	 */
+	//通过相对于当前.filmGauge的焦距，设置FOV
 	setFocalLength: function ( focalLength ) {
 
 		// see http://www.bobatkins.com/photography/technical/field_of_view.html
@@ -80,6 +91,7 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 	/**
 	 * Calculates the focal length from the current .fov and .filmGauge.
 	 */
+	//返回当前.fov（视野角度）相对于.filmGauge（胶片尺寸）的焦距。
 	getFocalLength: function () {
 
 		var vExtentSlope = Math.tan( _Math.DEG2RAD * 0.5 * this.fov );
@@ -94,21 +106,21 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 			Math.tan( _Math.DEG2RAD * 0.5 * this.fov ) / this.zoom );
 
 	},
-
+	//返回当前胶片上图像的宽，如果.aspect大于或等于1（景观格式、横向构图），则结果等于.filmGauge。
 	getFilmWidth: function () {
 
 		// film not completely covered in portrait format (aspect < 1)
 		return this.filmGauge * Math.min( this.aspect, 1 );
 
 	},
-
+	//返回当前胶片上图像的高，如果.aspect小于或等于1（肖像格式、纵向构图），则结果等于.filmGauge。
 	getFilmHeight: function () {
 
 		// film not completely covered in landscape format (aspect > 1)
 		return this.filmGauge / Math.max( this.aspect, 1 );
 
 	},
-
+	//下面的注释有解释，view的作用就是设置多个窗口来显示到界面上
 	/**
 	 * Sets an offset in a larger frustum. This is useful for multi-window or
 	 * multi-monitor/multi-machine setups.
@@ -185,7 +197,7 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 		this.updateProjectionMatrix();
 
 	},
-
+	//更新投影矩阵
 	updateProjectionMatrix: function () {
 
 		var near = this.near,
@@ -215,7 +227,7 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 		this.projectionMatrixInverse.getInverse( this.projectionMatrix );
 
 	},
-
+	//变成json格式
 	toJSON: function ( meta ) {
 
 		var data = Object3D.prototype.toJSON.call( this, meta );

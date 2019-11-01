@@ -2,13 +2,15 @@
  * @author mrdoob / http://mrdoob.com/
  * @author Reece Aaron Lecrivain / http://reecenotes.com/
  */
-import { Object3D } from '../core/Object3D.js';
+import {
+	Object3D
+} from '../core/Object3D.js';
 /**
  * Audio声音实例，必须有一个listener
  */
-function Audio( listener ) {
+function Audio(listener) {
 	//继承自object3D
-	Object3D.call( this );
+	Object3D.call(this);
 
 	this.type = 'Audio';
 	//获得Audiolistener
@@ -17,7 +19,7 @@ function Audio( listener ) {
 	this.context = listener.context;
 	//获得上下文创建的gain node
 	this.gain = this.context.createGain();
-	this.gain.connect( listener.getInput() );
+	this.gain.connect(listener.getInput());
 	//自动播放
 	this.autoplay = false;
 	//资源的buffer
@@ -45,7 +47,7 @@ function Audio( listener ) {
 
 }
 
-Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
+Audio.prototype = Object.assign(Object.create(Object3D.prototype), {
 	//构造器类型
 	constructor: Audio,
 	//获得gainnode
@@ -56,7 +58,7 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	},
 	//设置source给audioBuffer, 和设置sourceType给 'audioNode'.
 	//并且设置hasPlaybackControl为false.
-	setNodeSource: function ( audioNode ) {
+	setNodeSource: function (audioNode) {
 
 		this.hasPlaybackControl = false;
 		this.sourceType = 'audioNode';
@@ -68,14 +70,14 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	},
 
 	/**
-	*  应用HTMLMediaElement类型对象作为音源.
-	* 并且设置hasPlaybackControl为false.
-	*/
-	setMediaElementSource: function ( mediaElement ) {
+	 *  应用HTMLMediaElement类型对象作为音源.
+	 * 并且设置hasPlaybackControl为false.
+	 */
+	setMediaElementSource: function (mediaElement) {
 
 		this.hasPlaybackControl = false;
 		this.sourceType = 'mediaNode';
-		this.source = this.context.createMediaElementSource( mediaElement );
+		this.source = this.context.createMediaElementSource(mediaElement);
 		this.connect();
 
 		return this;
@@ -86,12 +88,12 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	 * 设置source给audioBuffer, 和设置sourceType为'buffer'.
 	 * 如果autoplay为true, 也开始播放.
 	 */
-	setBuffer: function ( audioBuffer ) {
+	setBuffer: function (audioBuffer) {
 
 		this.buffer = audioBuffer;
 		this.sourceType = 'buffer';
 
-		if ( this.autoplay ) this.play();
+		if (this.autoplay) this.play();
 
 		return this;
 
@@ -101,16 +103,16 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	 */
 	play: function () {
 
-		if ( this.isPlaying === true ) {
+		if (this.isPlaying === true) {
 
-			console.warn( 'THREE.Audio: Audio is already playing.' );
+			console.warn('THREE.Audio: Audio is already playing.');
 			return;
 
 		}
 
-		if ( this.hasPlaybackControl === false ) {
+		if (this.hasPlaybackControl === false) {
 
-			console.warn( 'THREE.Audio: this Audio has no playback control.' );
+			console.warn('THREE.Audio: this Audio has no playback control.');
 			return;
 
 		}
@@ -119,16 +121,16 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		//设置相关参数
 		source.buffer = this.buffer;
 		source.loop = this.loop;
-		source.onended = this.onEnded.bind( this );
+		source.onended = this.onEnded.bind(this);
 		this.startTime = this.context.currentTime;
-		source.start( this.startTime, this.offset );
+		source.start(this.startTime, this.offset);
 
 		this.isPlaying = true;
 
 		this.source = source;
 
-		this.setDetune( this.detune );
-		this.setPlaybackRate( this.playbackRate );
+		this.setDetune(this.detune);
+		this.setPlaybackRate(this.playbackRate);
 
 		return this.connect();
 
@@ -138,9 +140,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	 */
 	pause: function () {
 
-		if ( this.hasPlaybackControl === false ) {
+		if (this.hasPlaybackControl === false) {
 
-			console.warn( 'THREE.Audio: this Audio has no playback control.' );
+			console.warn('THREE.Audio: this Audio has no playback control.');
 			return;
 
 		}
@@ -151,11 +153,11 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		 * 设置偏移量
 		 * 设置播放键为false
 		 */
-		if ( this.isPlaying === true ) {
+		if (this.isPlaying === true) {
 
 			this.source.stop();
 			this.source.onended = null;
-			this.offset += ( this.context.currentTime - this.startTime ) * this.playbackRate;
+			this.offset += (this.context.currentTime - this.startTime) * this.playbackRate;
 			this.isPlaying = false;
 
 		}
@@ -168,9 +170,9 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	 */
 	stop: function () {
 
-		if ( this.hasPlaybackControl === false ) {
+		if (this.hasPlaybackControl === false) {
 
-			console.warn( 'THREE.Audio: this Audio has no playback control.' );
+			console.warn('THREE.Audio: this Audio has no playback control.');
 			return;
 
 		}
@@ -193,63 +195,69 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 	 */
 	connect: function () {
 
-		if ( this.filters.length > 0 ) {
+		if (this.filters.length > 0) {
 
-			this.source.connect( this.filters[ 0 ] );
+			this.source.connect(this.filters[0]);
 
-			for ( var i = 1, l = this.filters.length; i < l; i ++ ) {
+			for (var i = 1, l = this.filters.length; i < l; i++) {
 
-				this.filters[ i - 1 ].connect( this.filters[ i ] );
+				this.filters[i - 1].connect(this.filters[i]);
 
 			}
 
-			this.filters[ this.filters.length - 1 ].connect( this.getOutput() );
+			this.filters[this.filters.length - 1].connect(this.getOutput());
 
 		} else {
 
-			this.source.connect( this.getOutput() );
+			this.source.connect(this.getOutput());
 
 		}
 
 		return this;
 
 	},
-
+	/**
+	 * 取消链接Audio.source的方法，
+	 */
 	disconnect: function () {
 
-		if ( this.filters.length > 0 ) {
+		if (this.filters.length > 0) {
 
-			this.source.disconnect( this.filters[ 0 ] );
+			this.source.disconnect(this.filters[0]);
 
-			for ( var i = 1, l = this.filters.length; i < l; i ++ ) {
+			for (var i = 1, l = this.filters.length; i < l; i++) {
 
-				this.filters[ i - 1 ].disconnect( this.filters[ i ] );
+				this.filters[i - 1].disconnect(this.filters[i]);
 
 			}
 
-			this.filters[ this.filters.length - 1 ].disconnect( this.getOutput() );
+			this.filters[this.filters.length - 1].disconnect(this.getOutput());
 
 		} else {
 
-			this.source.disconnect( this.getOutput() );
+			this.source.disconnect(this.getOutput());
 
 		}
 
 		return this;
 
 	},
-
+	/**
+	 * 获得filters
+	 */
 	getFilters: function () {
 
 		return this.filters;
 
 	},
+	/**
+	 * 设置filters
+	 */
+	setFilters: function (value) {
 
-	setFilters: function ( value ) {
+		if (!value) value = [];
 
-		if ( ! value ) value = [];
-
-		if ( this.isPlaying === true ) {
+		if (this.isPlaying === true) {
 
 			this.disconnect();
 			this.filters = value;
@@ -264,79 +272,95 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this;
 
 	},
-
-	setDetune: function ( value ) {
+	/**
+	 * 设置音高
+	 */
+	setDetune: function (value) {
 
 		this.detune = value;
 
-		if ( this.source.detune === undefined ) return; // only set detune when available
+		if (this.source.detune === undefined) return; // only set detune when available
 
-		if ( this.isPlaying === true ) {
+		if (this.isPlaying === true) {
 
-			this.source.detune.setTargetAtTime( this.detune, this.context.currentTime, 0.01 );
+			this.source.detune.setTargetAtTime(this.detune, this.context.currentTime, 0.01);
 
 		}
 
 		return this;
 
 	},
-
+	/**
+	 * 获得音高
+	 */
 	getDetune: function () {
 
 		return this.detune;
 
 	},
-
+	/**
+	 * 获得filter
+	 */
 	getFilter: function () {
 
-		return this.getFilters()[ 0 ];
+		return this.getFilters()[0];
 
 	},
+	/**
+	 * 设置filter
+	 */
+	setFilter: function (filter) {
 
-	setFilter: function ( filter ) {
-
-		return this.setFilters( filter ? [ filter ] : [] );
+		return this.setFilters(filter ? [filter] : []);
 
 	},
+	/**
+	 * 设置播放控制获取的是一个bool值
+	 */
+	setPlaybackRate: function (value) {
 
-	setPlaybackRate: function ( value ) {
+		if (this.hasPlaybackControl === false) {
 
-		if ( this.hasPlaybackControl === false ) {
-
-			console.warn( 'THREE.Audio: this Audio has no playback control.' );
+			console.warn('THREE.Audio: this Audio has no playback control.');
 			return;
 
 		}
 
 		this.playbackRate = value;
 
-		if ( this.isPlaying === true ) {
+		if (this.isPlaying === true) {
 
-			this.source.playbackRate.setTargetAtTime( this.playbackRate, this.context.currentTime, 0.01 );
+			this.source.playbackRate.setTargetAtTime(this.playbackRate, this.context.currentTime, 0.01);
 
 		}
 
 		return this;
 
 	},
-
+	/**
+	 * 获得播放控制
+	 */
 	getPlaybackRate: function () {
 
 		return this.playbackRate;
 
 	},
-
+	/**
+	 * 设置播放结束
+	 */
 	onEnded: function () {
 
 		this.isPlaying = false;
 
 	},
-
+	/**
+	 * 获得循环的状态
+	 */
 	getLoop: function () {
 
-		if ( this.hasPlaybackControl === false ) {
+		if (this.hasPlaybackControl === false) {
 
-			console.warn( 'THREE.Audio: this Audio has no playback control.' );
+			console.warn('THREE.Audio: this Audio has no playback control.');
 			return false;
 
 		}
@@ -344,19 +368,21 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this.loop;
 
 	},
+	/**
+	 * 设置循环
+	 */
+	setLoop: function (value) {
 
-	setLoop: function ( value ) {
+		if (this.hasPlaybackControl === false) {
 
-		if ( this.hasPlaybackControl === false ) {
-
-			console.warn( 'THREE.Audio: this Audio has no playback control.' );
+			console.warn('THREE.Audio: this Audio has no playback control.');
 			return;
 
 		}
 
 		this.loop = value;
 
-		if ( this.isPlaying === true ) {
+		if (this.isPlaying === true) {
 
 			this.source.loop = this.loop;
 
@@ -365,21 +391,27 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		return this;
 
 	},
-
+	/**
+	 * 获得gain
+	 */
 	getVolume: function () {
 
 		return this.gain.gain.value;
 
 	},
+	/**
+	 * 获得设置gain
+	 */
+	setVolume: function (value) {
 
-	setVolume: function ( value ) {
-
-		this.gain.gain.setTargetAtTime( value, this.context.currentTime, 0.01 );
+		this.gain.gain.setTargetAtTime(value, this.context.currentTime, 0.01);
 
 		return this;
 
 	}
 
-} );
+});
 
-export { Audio };
+export {
+	Audio
+};

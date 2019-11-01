@@ -8,11 +8,6 @@ import { _Math } from './Math.js';
  * @author WestLangley / http://github.com/WestLangley
  * @author bhouston / http://clara.io
  */
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
-
 /**
  * @description 欧拉角Three中欧拉角最后会变成四元数
  * 

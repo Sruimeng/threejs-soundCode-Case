@@ -1,14 +1,38 @@
-import { Vector3 } from '../math/Vector3.js';
-import { Vector2 } from '../math/Vector2.js';
-import { Sphere } from '../math/Sphere.js';
-import { Ray } from '../math/Ray.js';
-import { Matrix4 } from '../math/Matrix4.js';
-import { Object3D } from '../core/Object3D.js';
-import { Triangle } from '../math/Triangle.js';
-import { Face3 } from '../core/Face3.js';
-import { DoubleSide, BackSide, TrianglesDrawMode } from '../constants.js';
-import { MeshBasicMaterial } from '../materials/MeshBasicMaterial.js';
-import { BufferGeometry } from '../core/BufferGeometry.js';
+import {
+	Vector3
+} from '../math/Vector3.js';
+import {
+	Vector2
+} from '../math/Vector2.js';
+import {
+	Sphere
+} from '../math/Sphere.js';
+import {
+	Ray
+} from '../math/Ray.js';
+import {
+	Matrix4
+} from '../math/Matrix4.js';
+import {
+	Object3D
+} from '../core/Object3D.js';
+import {
+	Triangle
+} from '../math/Triangle.js';
+import {
+	Face3
+} from '../core/Face3.js';
+import {
+	DoubleSide,
+	BackSide,
+	TrianglesDrawMode
+} from '../constants.js';
+import {
+	MeshBasicMaterial
+} from '../materials/MeshBasicMaterial.js';
+import {
+	BufferGeometry
+} from '../core/BufferGeometry.js';
 
 /**
  * @author mrdoob / http://mrdoob.com/
@@ -17,80 +41,99 @@ import { BufferGeometry } from '../core/BufferGeometry.js';
  * @author jonobr1 / http://jonobr1.com/
  */
 
-function Mesh( geometry, material ) {
-
-	Object3D.call( this );
+/**
+ * @description 网格，就是吧顶点和纹理组装在一起然后显示出来
+ * 
+ * @param {Geometry} geometry 可以是Geometry或者BufferGeometry
+ * @param {Material} material 
+ */
+function Mesh(geometry, material) {
+	//继承自Object3D对象
+	Object3D.call(this);
 
 	this.type = 'Mesh';
 
 	this.geometry = geometry !== undefined ? geometry : new BufferGeometry();
-	this.material = material !== undefined ? material : new MeshBasicMaterial( { color: Math.random() * 0xffffff } );
+	this.material = material !== undefined ? material : new MeshBasicMaterial({
+		color: Math.random() * 0xffffff
+	});
+	//绘制模式，一共有三种绘制模式THREE.TrianglesDrawMode为单个三角形绘制
+	/**
+	 * THREE.TrianglesDrawMode这是默认值，这将使得每三个连续顶点(v0, v1, v2)，(v2, v3, v5)，
+	 * ……被解释为一个单独的三角形。
+	 * 如果顶点的数量不是3的倍数，那么将会忽略多余的顶点。
+	 *	THREE.TriangleStripDrawMode
+		这将使得一系列的三角形（由(v0, v1, v2)，(v2, v1, v3)，(v2, v3, v4)，……给定）一个一个地连在一起，每一个连续的三角形将和前一个三角形共享两个顶点。
 
+		THREE.TriangleFanDrawMode
+这将会使得一个序列中的每一个三角形（由(v0, v1, v2)，(v0, v2, v3)，(v0, v3, v4)，……给定）共享它们的第一个顶点（就像风扇一样）。
+	 */
 	this.drawMode = TrianglesDrawMode;
-
+	//更新变形存储的数组 用来更新morphTargetInfluences和morphTargetDictionary
+	//前者是一个权重数组指定了用了多少变形，后者是一个基于morphTarget.name属性的morphTargets的字典。 默认情况下是未定义的，但是会被updateMorphTargets重建。
 	this.updateMorphTargets();
 
 }
 
-Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
+Mesh.prototype = Object.assign(Object.create(Object3D.prototype), {
 
 	constructor: Mesh,
 
 	isMesh: true,
-
-	setDrawMode: function ( value ) {
+	//设置绘制模式
+	setDrawMode: function (value) {
 
 		this.drawMode = value;
 
 	},
+	//复制方法
+	copy: function (source) {
 
-	copy: function ( source ) {
-
-		Object3D.prototype.copy.call( this, source );
+		Object3D.prototype.copy.call(this, source);
 
 		this.drawMode = source.drawMode;
 
-		if ( source.morphTargetInfluences !== undefined ) {
+		if (source.morphTargetInfluences !== undefined) {
 
 			this.morphTargetInfluences = source.morphTargetInfluences.slice();
 
 		}
 
-		if ( source.morphTargetDictionary !== undefined ) {
+		if (source.morphTargetDictionary !== undefined) {
 
-			this.morphTargetDictionary = Object.assign( {}, source.morphTargetDictionary );
+			this.morphTargetDictionary = Object.assign({}, source.morphTargetDictionary);
 
 		}
 
 		return this;
 
 	},
-
+	//更新变形方法
 	updateMorphTargets: function () {
 
 		var geometry = this.geometry;
 		var m, ml, name;
-
-		if ( geometry.isBufferGeometry ) {
+		//先判断是否为BufferGeometry
+		if (geometry.isBufferGeometry) {
 
 			var morphAttributes = geometry.morphAttributes;
-			var keys = Object.keys( morphAttributes );
+			var keys = Object.keys(morphAttributes);
 
-			if ( keys.length > 0 ) {
+			if (keys.length > 0) {
 
-				var morphAttribute = morphAttributes[ keys[ 0 ] ];
+				var morphAttribute = morphAttributes[keys[0]];
 
-				if ( morphAttribute !== undefined ) {
+				if (morphAttribute !== undefined) {
 
 					this.morphTargetInfluences = [];
 					this.morphTargetDictionary = {};
 
-					for ( m = 0, ml = morphAttribute.length; m < ml; m ++ ) {
+					for (m = 0, ml = morphAttribute.length; m < ml; m++) {
 
-						name = morphAttribute[ m ].name || String( m );
+						name = morphAttribute[m].name || String(m);
 
-						this.morphTargetInfluences.push( 0 );
-						this.morphTargetDictionary[ name ] = m;
+						this.morphTargetInfluences.push(0);
+						this.morphTargetDictionary[name] = m;
 
 					}
 
@@ -102,17 +145,18 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 			var morphTargets = geometry.morphTargets;
 
-			if ( morphTargets !== undefined && morphTargets.length > 0 ) {
+			if (morphTargets !== undefined && morphTargets.length > 0) {
 
-				console.error( 'THREE.Mesh.updateMorphTargets() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
+				console.error('THREE.Mesh.updateMorphTargets() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.');
 
 			}
 
 		}
 
 	},
-
-	raycast: ( function () {
+	//在一条投射出去的Ray（射线）和这个网格之间产生交互。 Raycaster.intersectObject将会调用这个方法。
+	//判断该物体和射线是否相交的方法
+	raycast: (function () {
 
 		var inverseMatrix = new Matrix4();
 		var ray = new Ray();
@@ -133,28 +177,28 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		var intersectionPoint = new Vector3();
 		var intersectionPointWorld = new Vector3();
 
-		function checkIntersection( object, material, raycaster, ray, pA, pB, pC, point ) {
+		function checkIntersection(object, material, raycaster, ray, pA, pB, pC, point) {
 
 			var intersect;
 
-			if ( material.side === BackSide ) {
+			if (material.side === BackSide) {
 
-				intersect = ray.intersectTriangle( pC, pB, pA, true, point );
+				intersect = ray.intersectTriangle(pC, pB, pA, true, point);
 
 			} else {
 
-				intersect = ray.intersectTriangle( pA, pB, pC, material.side !== DoubleSide, point );
+				intersect = ray.intersectTriangle(pA, pB, pC, material.side !== DoubleSide, point);
 
 			}
 
-			if ( intersect === null ) return null;
+			if (intersect === null) return null;
 
-			intersectionPointWorld.copy( point );
-			intersectionPointWorld.applyMatrix4( object.matrixWorld );
+			intersectionPointWorld.copy(point);
+			intersectionPointWorld.applyMatrix4(object.matrixWorld);
 
-			var distance = raycaster.ray.origin.distanceTo( intersectionPointWorld );
+			var distance = raycaster.ray.origin.distanceTo(intersectionPointWorld);
 
-			if ( distance < raycaster.near || distance > raycaster.far ) return null;
+			if (distance < raycaster.near || distance > raycaster.far) return null;
 
 			return {
 				distance: distance,
@@ -164,28 +208,28 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 		}
 
-		function checkBufferGeometryIntersection( object, material, raycaster, ray, position, uv, a, b, c ) {
+		function checkBufferGeometryIntersection(object, material, raycaster, ray, position, uv, a, b, c) {
 
-			vA.fromBufferAttribute( position, a );
-			vB.fromBufferAttribute( position, b );
-			vC.fromBufferAttribute( position, c );
+			vA.fromBufferAttribute(position, a);
+			vB.fromBufferAttribute(position, b);
+			vC.fromBufferAttribute(position, c);
 
-			var intersection = checkIntersection( object, material, raycaster, ray, vA, vB, vC, intersectionPoint );
+			var intersection = checkIntersection(object, material, raycaster, ray, vA, vB, vC, intersectionPoint);
 
-			if ( intersection ) {
+			if (intersection) {
 
-				if ( uv ) {
+				if (uv) {
 
-					uvA.fromBufferAttribute( uv, a );
-					uvB.fromBufferAttribute( uv, b );
-					uvC.fromBufferAttribute( uv, c );
+					uvA.fromBufferAttribute(uv, a);
+					uvB.fromBufferAttribute(uv, b);
+					uvC.fromBufferAttribute(uv, c);
 
-					intersection.uv = Triangle.getUV( intersectionPoint, vA, vB, vC, uvA, uvB, uvC, new Vector2() );
+					intersection.uv = Triangle.getUV(intersectionPoint, vA, vB, vC, uvA, uvB, uvC, new Vector2());
 
 				}
 
-				var face = new Face3( a, b, c );
-				Triangle.getNormal( vA, vB, vC, face.normal );
+				var face = new Face3(a, b, c);
+				Triangle.getNormal(vA, vB, vC, face.normal);
 
 				intersection.face = face;
 
@@ -195,39 +239,38 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 		}
 
-		return function raycast( raycaster, intersects ) {
+		return function raycast(raycaster, intersects) {
 
 			var geometry = this.geometry;
 			var material = this.material;
 			var matrixWorld = this.matrixWorld;
 
-			if ( material === undefined ) return;
+			if (material === undefined) return;
 
 			// Checking boundingSphere distance to ray
-
-			if ( geometry.boundingSphere === null ) geometry.computeBoundingSphere();
-
-			sphere.copy( geometry.boundingSphere );
-			sphere.applyMatrix4( matrixWorld );
-
-			if ( raycaster.ray.intersectsSphere( sphere ) === false ) return;
+			//下面这一段就是检查射线和物体的球体跟box包围盒是否相交
+			if (geometry.boundingSphere === null) geometry.computeBoundingSphere();
+			//获得包围盒中的distance在世界坐标系中的位置
+			sphere.copy(geometry.boundingSphere);
+			sphere.applyMatrix4(matrixWorld);
+			if (raycaster.ray.intersectsSphere(sphere) === false) return;
 
 			//
 
-			inverseMatrix.getInverse( matrixWorld );
-			ray.copy( raycaster.ray ).applyMatrix4( inverseMatrix );
+			inverseMatrix.getInverse(matrixWorld);
+			ray.copy(raycaster.ray).applyMatrix4(inverseMatrix);
 
 			// Check boundingBox before continuing
 
-			if ( geometry.boundingBox !== null ) {
+			if (geometry.boundingBox !== null) {
 
-				if ( ray.intersectsBox( geometry.boundingBox ) === false ) return;
+				if (ray.intersectsBox(geometry.boundingBox) === false) return;
 
 			}
 
 			var intersection;
 
-			if ( geometry.isBufferGeometry ) {
+			if (geometry.isBufferGeometry) {
 
 				var a, b, c;
 				var index = geometry.index;
@@ -239,33 +282,33 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 				var group, groupMaterial;
 				var start, end;
 
-				if ( index !== null ) {
+				if (index !== null) {
 
 					// indexed buffer geometry
+					//判断material是否为数组
+					if (Array.isArray(material)) {
+						//遍历材质数组
+						for (i = 0, il = groups.length; i < il; i++) {
 
-					if ( Array.isArray( material ) ) {
+							group = groups[i];
+							groupMaterial = material[group.materialIndex];
+							//获得geometry的起点和终点
+							start = Math.max(group.start, drawRange.start);
+							end = Math.min((group.start + group.count), (drawRange.start + drawRange.count));
+							//遍历index里的数组
+							for (j = start, jl = end; j < jl; j += 3) {
 
-						for ( i = 0, il = groups.length; i < il; i ++ ) {
+								a = index.getX(j);
+								b = index.getX(j + 1);
+								c = index.getX(j + 2);
+								//判断射线和geometry中的依次的三个焦点组成的三角形是否相交
+								intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, ray, position, uv, a, b, c);
+								//如果相交，把信息储存起来
+								if (intersection) {
 
-							group = groups[ i ];
-							groupMaterial = material[ group.materialIndex ];
-
-							start = Math.max( group.start, drawRange.start );
-							end = Math.min( ( group.start + group.count ), ( drawRange.start + drawRange.count ) );
-
-							for ( j = start, jl = end; j < jl; j += 3 ) {
-
-								a = index.getX( j );
-								b = index.getX( j + 1 );
-								c = index.getX( j + 2 );
-
-								intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, ray, position, uv, a, b, c );
-
-								if ( intersection ) {
-
-									intersection.faceIndex = Math.floor( j / 3 ); // triangle number in indexed buffer semantics
+									intersection.faceIndex = Math.floor(j / 3); // triangle number in indexed buffer semantics
 									intersection.face.materialIndex = group.materialIndex;
-									intersects.push( intersection );
+									intersects.push(intersection);
 
 								}
 
@@ -274,22 +317,22 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 						}
 
 					} else {
+						//获得geometry的起点和终点
+						start = Math.max(0, drawRange.start);
+						end = Math.min(index.count, (drawRange.start + drawRange.count));
 
-						start = Math.max( 0, drawRange.start );
-						end = Math.min( index.count, ( drawRange.start + drawRange.count ) );
+						for (i = start, il = end; i < il; i += 3) {
 
-						for ( i = start, il = end; i < il; i += 3 ) {
+							a = index.getX(i);
+							b = index.getX(i + 1);
+							c = index.getX(i + 2);
+							//判断射线和geometry中的依次的三个焦点组成的三角形是否相交
+							intersection = checkBufferGeometryIntersection(this, material, raycaster, ray, position, uv, a, b, c);
 
-							a = index.getX( i );
-							b = index.getX( i + 1 );
-							c = index.getX( i + 2 );
+							if (intersection) {
 
-							intersection = checkBufferGeometryIntersection( this, material, raycaster, ray, position, uv, a, b, c );
-
-							if ( intersection ) {
-
-								intersection.faceIndex = Math.floor( i / 3 ); // triangle number in indexed buffer semantics
-								intersects.push( intersection );
+								intersection.faceIndex = Math.floor(i / 3); // triangle number in indexed buffer semantics
+								intersects.push(intersection);
 
 							}
 
@@ -297,33 +340,34 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 					}
 
-				} else if ( position !== undefined ) {
+				} else if (position !== undefined) {
 
 					// non-indexed buffer geometry
+					//如果是没有index的buffergeometry
+					//首先也是判断material是否为数组
+					if (Array.isArray(material)) {
+						//和上述处理类似，但是有没有可能去整合一下
+						for (i = 0, il = groups.length; i < il; i++) {
 
-					if ( Array.isArray( material ) ) {
+							group = groups[i];
+							groupMaterial = material[group.materialIndex];
 
-						for ( i = 0, il = groups.length; i < il; i ++ ) {
+							start = Math.max(group.start, drawRange.start);
+							end = Math.min((group.start + group.count), (drawRange.start + drawRange.count));
 
-							group = groups[ i ];
-							groupMaterial = material[ group.materialIndex ];
-
-							start = Math.max( group.start, drawRange.start );
-							end = Math.min( ( group.start + group.count ), ( drawRange.start + drawRange.count ) );
-
-							for ( j = start, jl = end; j < jl; j += 3 ) {
+							for (j = start, jl = end; j < jl; j += 3) {
 
 								a = j;
 								b = j + 1;
 								c = j + 2;
 
-								intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, ray, position, uv, a, b, c );
+								intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, ray, position, uv, a, b, c);
 
-								if ( intersection ) {
+								if (intersection) {
 
-									intersection.faceIndex = Math.floor( j / 3 ); // triangle number in non-indexed buffer semantics
+									intersection.faceIndex = Math.floor(j / 3); // triangle number in non-indexed buffer semantics
 									intersection.face.materialIndex = group.materialIndex;
-									intersects.push( intersection );
+									intersects.push(intersection);
 
 								}
 
@@ -333,21 +377,21 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 					} else {
 
-						start = Math.max( 0, drawRange.start );
-						end = Math.min( position.count, ( drawRange.start + drawRange.count ) );
+						start = Math.max(0, drawRange.start);
+						end = Math.min(position.count, (drawRange.start + drawRange.count));
 
-						for ( i = start, il = end; i < il; i += 3 ) {
+						for (i = start, il = end; i < il; i += 3) {
 
 							a = i;
 							b = i + 1;
 							c = i + 2;
 
-							intersection = checkBufferGeometryIntersection( this, material, raycaster, ray, position, uv, a, b, c );
+							intersection = checkBufferGeometryIntersection(this, material, raycaster, ray, position, uv, a, b, c);
 
-							if ( intersection ) {
+							if (intersection) {
 
-								intersection.faceIndex = Math.floor( i / 3 ); // triangle number in non-indexed buffer semantics
-								intersects.push( intersection );
+								intersection.faceIndex = Math.floor(i / 3); // triangle number in non-indexed buffer semantics
+								intersects.push(intersection);
 
 							}
 
@@ -357,80 +401,80 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 				}
 
-			} else if ( geometry.isGeometry ) {
-
+			} else if (geometry.isGeometry) {
+				//如果不是buffergeometry
 				var fvA, fvB, fvC;
-				var isMultiMaterial = Array.isArray( material );
+				var isMultiMaterial = Array.isArray(material);
 
 				var vertices = geometry.vertices;
 				var faces = geometry.faces;
 				var uvs;
 
-				var faceVertexUvs = geometry.faceVertexUvs[ 0 ];
-				if ( faceVertexUvs.length > 0 ) uvs = faceVertexUvs;
+				var faceVertexUvs = geometry.faceVertexUvs[0];
+				if (faceVertexUvs.length > 0) uvs = faceVertexUvs;
+				//遍历faces
+				for (var f = 0, fl = faces.length; f < fl; f++) {
+					//获得坐标
+					var face = faces[f];
+					var faceMaterial = isMultiMaterial ? material[face.materialIndex] : material;
 
-				for ( var f = 0, fl = faces.length; f < fl; f ++ ) {
+					if (faceMaterial === undefined) continue;
 
-					var face = faces[ f ];
-					var faceMaterial = isMultiMaterial ? material[ face.materialIndex ] : material;
-
-					if ( faceMaterial === undefined ) continue;
-
-					fvA = vertices[ face.a ];
-					fvB = vertices[ face.b ];
-					fvC = vertices[ face.c ];
-
-					if ( faceMaterial.morphTargets === true ) {
+					fvA = vertices[face.a];
+					fvB = vertices[face.b];
+					fvC = vertices[face.c];
+					//判断material 变形变量 （动画会用到）
+					if (faceMaterial.morphTargets === true) {
 
 						var morphTargets = geometry.morphTargets;
 						var morphInfluences = this.morphTargetInfluences;
 
-						vA.set( 0, 0, 0 );
-						vB.set( 0, 0, 0 );
-						vC.set( 0, 0, 0 );
+						vA.set(0, 0, 0);
+						vB.set(0, 0, 0);
+						vC.set(0, 0, 0);
 
-						for ( var t = 0, tl = morphTargets.length; t < tl; t ++ ) {
+						for (var t = 0, tl = morphTargets.length; t < tl; t++) {
 
-							var influence = morphInfluences[ t ];
+							var influence = morphInfluences[t];
 
-							if ( influence === 0 ) continue;
+							if (influence === 0) continue;
 
-							var targets = morphTargets[ t ].vertices;
+							var targets = morphTargets[t].vertices;
 
-							vA.addScaledVector( tempA.subVectors( targets[ face.a ], fvA ), influence );
-							vB.addScaledVector( tempB.subVectors( targets[ face.b ], fvB ), influence );
-							vC.addScaledVector( tempC.subVectors( targets[ face.c ], fvC ), influence );
+							vA.addScaledVector(tempA.subVectors(targets[face.a], fvA), influence);
+							vB.addScaledVector(tempB.subVectors(targets[face.b], fvB), influence);
+							vC.addScaledVector(tempC.subVectors(targets[face.c], fvC), influence);
 
 						}
 
-						vA.add( fvA );
-						vB.add( fvB );
-						vC.add( fvC );
+						vA.add(fvA);
+						vB.add(fvB);
+						vC.add(fvC);
 
 						fvA = vA;
 						fvB = vB;
 						fvC = vC;
 
 					}
+					//下面的东西和再上面的差不多
+					intersection = checkIntersection(this, faceMaterial, raycaster, ray, fvA, fvB, fvC, intersectionPoint);
 
-					intersection = checkIntersection( this, faceMaterial, raycaster, ray, fvA, fvB, fvC, intersectionPoint );
+					if (intersection) {
 
-					if ( intersection ) {
+						if (uvs && uvs[f]) {
 
-						if ( uvs && uvs[ f ] ) {
+							var uvs_f = uvs[f];
+							uvA.copy(uvs_f[0]);
+							uvB.copy(uvs_f[1]);
+							uvC.copy(uvs_f[2]);
 
-							var uvs_f = uvs[ f ];
-							uvA.copy( uvs_f[ 0 ] );
-							uvB.copy( uvs_f[ 1 ] );
-							uvC.copy( uvs_f[ 2 ] );
-
-							intersection.uv = Triangle.getUV( intersectionPoint, fvA, fvB, fvC, uvA, uvB, uvC, new Vector2() );
+							intersection.uv = Triangle.getUV(intersectionPoint, fvA, fvB, fvC, uvA, uvB, uvC, new Vector2());
 
 						}
 
 						intersection.face = face;
 						intersection.faceIndex = f;
-						intersects.push( intersection );
+						intersects.push(intersection);
 
 					}
 
@@ -440,15 +484,17 @@ Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 		};
 
-	}() ),
+	}()),
 
 	clone: function () {
 
-		return new this.constructor( this.geometry, this.material ).copy( this );
+		return new this.constructor(this.geometry, this.material).copy(this);
 
 	}
 
-} );
+});
 
 
-export { Mesh };
+export {
+	Mesh
+};
