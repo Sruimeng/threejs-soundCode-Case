@@ -1,10 +1,6 @@
 /**
  * @author mrdoob / http://mrdoob.com/
  */
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 function Uniform( value ) {
 
 	/**

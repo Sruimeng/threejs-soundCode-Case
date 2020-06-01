@@ -4,10 +4,6 @@
 
 import { Texture } from './Texture.js';
 import { NearestFilter } from '../constants.js';
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 /**
  * @description 数据纹理 根据传进来的数据，表示出纹理
  * @date 2019-05-07

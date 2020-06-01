@@ -4,10 +4,6 @@
 
 import { RGBFormat, LinearFilter } from '../constants.js';
 import { Texture } from './Texture.js';
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 
 /**
  * @description 视频贴图

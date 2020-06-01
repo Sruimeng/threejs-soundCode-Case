@@ -3,10 +3,6 @@
  */
 
 import { Texture } from './Texture.js';
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 /**
  * @description canvas贴图，基本跟texture一样
  * @date 2019-05-06

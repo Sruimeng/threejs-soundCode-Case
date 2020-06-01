@@ -4,10 +4,6 @@
 
 import { Texture } from './Texture.js';
 import { ClampToEdgeWrapping, NearestFilter } from '../constants.js';
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 /**
  * @description 3D数据纹理
  * @date 2019-05-07

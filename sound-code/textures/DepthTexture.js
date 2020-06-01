@@ -2,10 +2,6 @@
  * @author Matt DesLauriers / @mattdesl
  * @author atix / arthursilber.de
  */
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 import { Texture } from './Texture.js';
 import { NearestFilter, UnsignedShortType, UnsignedInt248Type, DepthFormat, DepthStencilFormat } from '../constants.js';
 

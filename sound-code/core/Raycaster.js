@@ -5,10 +5,6 @@ import { Ray } from '../math/Ray.js';
  * @author bhouston / http://clara.io/
  * @author stephomi / http://stephaneginier.com/
  */
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 function Raycaster(origin, direction, near, far) {
 	/**
 	 * 该方法为射线拾取的方法

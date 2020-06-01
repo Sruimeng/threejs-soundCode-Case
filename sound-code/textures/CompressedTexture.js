@@ -1,10 +1,6 @@
 /**
  * @author alteredq / http://alteredqualia.com/
  */
-/*
-* 本文档为Three.js翻译文档，如有任何疑问请联系:
-* pygmalioneffect@aliyun.com
-*/
 import { Texture } from './Texture.js';
 /**
  * @description 压缩贴图

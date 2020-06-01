@@ -32,11 +32,6 @@ import {
 } from '../extras/ImageUtils.js';
 
 var textureId = 0;
-/*
- * 本文档为Three.js翻译文档，如有任何疑问请联系:
- * pygmalioneffect@aliyun.com
- */
-
 /**
  * @description 该方法为
  * @date 2019-05-06
