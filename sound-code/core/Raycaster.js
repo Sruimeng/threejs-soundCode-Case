@@ -87,7 +87,7 @@ Object.assign(Raycaster.prototype, {
 		this.ray.set(origin, direction);
 
 	},
-	//
+	//从摄像机设置光线的起点和方向
 	setFromCamera: function (coords, camera) {
 
 		if ((camera && camera.isPerspectiveCamera)) {
@@ -107,7 +107,7 @@ Object.assign(Raycaster.prototype, {
 		}
 
 	},
-
+	//单个objcet的检测判断
 	intersectObject: function (object, recursive, optionalTarget) {
 
 		var intersects = optionalTarget || [];
@@ -121,9 +121,9 @@ Object.assign(Raycaster.prototype, {
 	},
 
 	/**
-	 * @description
+	 * @description 多个object的检测
 	 * @date 2019-04-15
-	 * @param {*	} objects
+	 * @param {*} objects
 	 * @param {*} recursive
 	 * @param {*} optionalTarget
 	 * @returns 

@@ -11,6 +11,13 @@ import { Quaternion } from './Quaternion.js';
  * @author WestLangley / http://github.com/WestLangley
  */
 
+/**
+ * 3维向量
+ *
+ * @param {*} x
+ * @param {*} y
+ * @param {*} z
+ */
 function Vector3( x, y, z ) {
 
 	this.x = x || 0;
